@@ -5,16 +5,23 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.unit.Density
 import com.charleskorn.kaml.YamlInput
+import com.charleskorn.kaml.YamlMap
+import com.charleskorn.kaml.YamlNode
+import com.charleskorn.kaml.YamlScalar
 import com.charleskorn.kaml.yamlMap
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.complex.PaddingProperty
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.complex.ScaleProperty
+import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.complex.ScaleSerializer
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.complex.SizeProperty
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.type.ColorTypeProperty
+import com.lumeen.platform.com.lumeen.platform.mediation.drawable.type.ShapeSerializer
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.type.ShapeTypeProperty
+import com.lumeen.platform.yaml
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -71,15 +78,21 @@ sealed class ModifierProperty {
     @Serializable
     @SerialName("background")
     data class Background(
-        val color: ColorTypeProperty,
+        val color: ColorTypeProperty = ColorTypeProperty.Unspecified,
+        val shape: ShapeTypeProperty = ShapeTypeProperty.Rectangle,
+    ) : ModifierProperty() {
+        override fun applyModifier(modifier: Modifier, density: Density): Modifier = modifier.background(
+            color = color.asComposeColor(),
+            shape = shape.asComposeShape(density),
+        )
+    }
+
+    @Serializable
+    @SerialName("clip")
+    data class Clip(
         val shape: ShapeTypeProperty,
     ) : ModifierProperty() {
-        override fun applyModifier(modifier: Modifier, density: Density): Modifier {
-            return modifier.background(
-                color = color.asComposeColor(),
-                shape = shape.asComposeShape(density),
-            )
-        }
+        override fun applyModifier(modifier: Modifier, density: Density): Modifier = modifier.clip(shape.asComposeShape(density))
     }
 
     abstract fun applyModifier(modifier: Modifier, density: Density): Modifier
@@ -104,6 +117,8 @@ object ModifierPropertySerializer : KSerializer<ModifierProperty> {
                 encoder.encodeSerializableValue(ModifierProperty.Size.serializer(), value)
             is ModifierProperty.Background ->
                 encoder.encodeSerializableValue(ModifierProperty.Background.serializer(), value)
+            is ModifierProperty.Clip ->
+                encoder.encodeSerializableValue(ModifierProperty.Clip.serializer(), value)
         }
     }
 
@@ -127,6 +142,10 @@ object ModifierPropertySerializer : KSerializer<ModifierProperty> {
                     decoder.decodeSerializableValue(ModifierProperty.Size.serializer())
                 "background" in keys ->
                     decoder.decodeSerializableValue(ModifierProperty.Background.serializer())
+                "clip" in keys && node is YamlMap ->
+                    ModifierProperty.Clip(
+                        shape = ShapeSerializer.parseShapeFromYamlNode(node.get<YamlMap>("clip")!!)
+                    )
                 else -> throw SerializationException(
                     "Unknown modifier at ${decoder.node}: keys=$keys"
                 )

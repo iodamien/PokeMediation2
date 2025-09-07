@@ -28,6 +28,7 @@ val module = SerializersModule {
         subclass(ModifierProperty.Padding::class)
         subclass(ModifierProperty.Size::class)
         subclass(ModifierProperty.Background::class)
+        subclass(ModifierProperty.Clip::class)
     }
 }
 

@@ -6,6 +6,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Density
 import com.charleskorn.kaml.YamlInput
 import com.charleskorn.kaml.YamlMap
+import com.charleskorn.kaml.YamlNode
 import com.charleskorn.kaml.YamlScalar
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.KSerializer
@@ -93,84 +94,46 @@ object ShapeSerializer : KSerializer<ShapeTypeProperty> {
 
     override fun deserialize(decoder: Decoder): ShapeTypeProperty {
         if (decoder is YamlInput) {
-            return when (val node = decoder.node) {
-                is YamlScalar -> {
-                    when (val content = node.content.trim().lowercase()) {
-                        "rectangle" -> ShapeTypeProperty.Rectangle
-                        "circle" -> ShapeTypeProperty.Circle
-                        else -> {
-                            // Try to parse as a single radius for rounded corners
-                            try {
-                                val radius = parseDpProperty(node.content)
-                                ShapeTypeProperty.RoundedCornerShape.all(radius)
-                            } catch (e: Exception) {
-                                throw SerializationException("Unknown shape: '$content'")
-                            }
-                        }
-                    }
-                }
-                is YamlMap -> {
-                    // Check if it's a tagged shape
-                    val type = node.get<YamlScalar>("type")?.content?.lowercase()
-
-                    when (type) {
-                        "rectangle" -> ShapeTypeProperty.Rectangle
-                        "circle" -> ShapeTypeProperty.Circle
-                        "roundedcornershape", "rounded" -> parseRoundedCornerShape(node)
-                        else -> {
-                            // Assume it's RoundedCornerShape if no type specified
-                            parseRoundedCornerShape(node)
-                        }
-                    }
-                }
-                else -> throw SerializationException("Invalid shape: $node")
-            }
+            return parseShapeFromYamlNode(decoder.node)
         }
 
-        // Generic fallback for non-YAML decoders
-        return try {
-            val stringValue = decoder.decodeString()
-            when (stringValue.lowercase()) {
-                "rectangle" -> ShapeTypeProperty.Rectangle
-                "circle" -> ShapeTypeProperty.Circle
-                else -> {
-                    val radius = parseDpProperty(stringValue)
-                    ShapeTypeProperty.RoundedCornerShape.all(radius)
+        throw IllegalStateException("Unreachable")
+    }
+
+    internal fun parseShapeFromYamlNode(node: YamlNode): ShapeTypeProperty {
+        return when (node) {
+            is YamlScalar -> {
+                when (val content = node.content.trim().lowercase()) {
+                    "rectangle" -> ShapeTypeProperty.Rectangle
+                    "circle" -> ShapeTypeProperty.Circle
+                    else -> {
+                        // Try to parse as a single radius for rounded corners
+                        try {
+                            val radius = ShapeSerializer.parseDpProperty(node.content)
+                            ShapeTypeProperty.RoundedCornerShape.all(radius)
+                        } catch (e: Exception) {
+                            throw SerializationException("Unknown shape: '$content'")
+                        }
+                    }
                 }
             }
-        } catch (_: Exception) {
-            // Try to decode as RoundedCornerShape object
-            var topLeft = DpTypeProperty.Zero
-            var topRight = DpTypeProperty.Zero
-            var bottomRight = DpTypeProperty.Zero
-            var bottomLeft = DpTypeProperty.Zero
-            var allRadius: DpTypeProperty? = null
 
-            val c = decoder.beginStructure(buildClassSerialDescriptor("ShapeMap") {
-                element<String>("topLeft", isOptional = true)
-                element<String>("topRight", isOptional = true)
-                element<String>("botRight", isOptional = true)
-                element<String>("botLeft", isOptional = true)
-                element<String>("radius", isOptional = true)
-                element<String>("r", isOptional = true)
-            })
+            is YamlMap -> {
+                // Check if it's a tagged shape
+                val type = node.get<YamlScalar>("type")?.content?.lowercase()
 
-            loop@ while (true) {
-                when (val i = c.decodeElementIndex(descriptor)) {
-                    CompositeDecoder.DECODE_DONE -> break@loop
-                    0 -> topLeft = parseDpProperty(c.decodeStringElement(descriptor, 0))
-                    1 -> topRight = parseDpProperty(c.decodeStringElement(descriptor, 1))
-                    2 -> bottomRight = parseDpProperty(c.decodeStringElement(descriptor, 2))
-                    3 -> bottomLeft = parseDpProperty(c.decodeStringElement(descriptor, 3))
-                    4 -> allRadius = parseDpProperty(c.decodeStringElement(descriptor, 4))
-                    5 -> allRadius = parseDpProperty(c.decodeStringElement(descriptor, 5))
+                when (type) {
+                    "rectangle" -> ShapeTypeProperty.Rectangle
+                    "circle" -> ShapeTypeProperty.Circle
+                    "roundedcornershape", "rounded" -> ShapeSerializer.parseRoundedCornerShape(node)
+                    else -> {
+                        // Assume it's RoundedCornerShape if no type specified
+                        ShapeSerializer.parseRoundedCornerShape(node)
+                    }
                 }
             }
-            c.endStructure(descriptor)
 
-            allRadius?.let {
-                ShapeTypeProperty.RoundedCornerShape.all(it)
-            } ?: ShapeTypeProperty.RoundedCornerShape(topLeft, topRight, bottomRight, bottomLeft)
+            else -> throw SerializationException("Invalid shape: $node")
         }
     }
 

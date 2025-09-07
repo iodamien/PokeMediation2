@@ -2,9 +2,11 @@ name: "ExampleStruct"
 modifiers:
 - size: { w: 200, h: 200 }
 - degrees: 5.0
+- clip: { type: Rounded, topLeft: 30, topRight: 30, botLeft: 30, botRight: 30 }
 - background:
   color: { r: 255, g: 0, b: 255, a: 255 }
-  shape: { type: Rounded, topLeft: 30, topRight: 30, botLeft: 30, botRight: 30 }
+#  shape: { type: Rounded, topLeft: 30, topRight: 30, botLeft: 30, botRight: 30 }
+
 
 - scale: { x: 1.0, y: 1.0 }
 - alpha: 0.8
