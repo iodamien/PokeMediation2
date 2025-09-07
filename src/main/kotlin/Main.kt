@@ -27,6 +27,7 @@ val module = SerializersModule {
         subclass(ModifierProperty.Alpha::class)
         subclass(ModifierProperty.Padding::class)
         subclass(ModifierProperty.Size::class)
+        subclass(ModifierProperty.Background::class)
     }
 }
 
@@ -83,8 +84,7 @@ fun main() {
         val density = LocalDensity.current
         Box(
             modifier = Modifier
-                .then(decodedStruct.applyModifiers(Modifier, density))
-                .background(color = androidx.compose.ui.graphics.Color.Cyan),
+                .then(decodedStruct.applyModifiers(Modifier, density)),
         ) {
             Text("Hello, ${decodedStruct.name}!")
         }

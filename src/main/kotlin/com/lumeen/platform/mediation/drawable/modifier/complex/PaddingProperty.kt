@@ -3,7 +3,7 @@ package com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.comp
 import com.charleskorn.kaml.YamlInput
 import com.charleskorn.kaml.YamlMap
 import com.charleskorn.kaml.YamlScalar
-import com.lumeen.platform.com.lumeen.platform.mediation.drawable.type.DpProperty
+import com.lumeen.platform.com.lumeen.platform.mediation.drawable.type.DpTypeProperty
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.type.DpPropertySerializer
 import kotlinx.serialization.*
 import kotlinx.serialization.descriptors.*
@@ -15,13 +15,13 @@ import kotlinx.serialization.encoding.Encoder
 @SerialName("Padding")
 @Serializable(with = PaddingSerializer::class)
 data class PaddingProperty(
-    val left: DpProperty = DpProperty.Default,
-    val top: DpProperty = DpProperty.Default,
-    val right: DpProperty = DpProperty.Default,
-    val bottom: DpProperty = DpProperty.Default,
+    val left: DpTypeProperty = DpTypeProperty.Default,
+    val top: DpTypeProperty = DpTypeProperty.Default,
+    val right: DpTypeProperty = DpTypeProperty.Default,
+    val bottom: DpTypeProperty = DpTypeProperty.Default,
 ) {
     companion object {
-        fun all(v: DpProperty) = PaddingProperty(v, v, v, v)
+        fun all(v: DpTypeProperty) = PaddingProperty(v, v, v, v)
     }
 }
 
@@ -39,12 +39,12 @@ object PaddingSerializer : KSerializer<PaddingProperty> {
                     PaddingProperty.all(dpValue)
                 }
                 is YamlMap -> {
-                    fun getDpProperty(key: String): DpProperty {
+                    fun getDpProperty(key: String): DpTypeProperty {
                         val content = node.get<YamlScalar>(key)?.content
                         return if (content != null) {
                             parseDpProperty(content)
                         } else {
-                            DpProperty.Default
+                            DpTypeProperty.Default
                         }
                     }
 
@@ -72,11 +72,11 @@ object PaddingSerializer : KSerializer<PaddingProperty> {
             PaddingProperty.all(parseDpProperty(singleValue))
         } catch (_: Exception) {
             // Try to decode as a structured object
-            var left = DpProperty.Default
-            var top = DpProperty.Default
-            var right = DpProperty.Default
-            var bottom = DpProperty.Default
-            var value: DpProperty? = null
+            var left = DpTypeProperty.Default
+            var top = DpTypeProperty.Default
+            var right = DpTypeProperty.Default
+            var bottom = DpTypeProperty.Default
+            var value: DpTypeProperty? = null
 
             val c = decoder.beginStructure(buildClassSerialDescriptor("PaddingMap") {
                 element<String>("l", isOptional = true)
@@ -117,7 +117,7 @@ object PaddingSerializer : KSerializer<PaddingProperty> {
         c.endStructure(d)
     }
 
-    private fun parseDpProperty(content: String): DpProperty {
+    private fun parseDpProperty(content: String): DpTypeProperty {
         val dpSerializer = DpPropertySerializer()
         return dpSerializer.parseString(content)
     }

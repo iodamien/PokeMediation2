@@ -1,5 +1,6 @@
 package com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.ui.Modifier
@@ -12,6 +13,7 @@ import com.charleskorn.kaml.yamlMap
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.complex.PaddingProperty
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.complex.ScaleProperty
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.complex.SizeProperty
+import com.lumeen.platform.com.lumeen.platform.mediation.drawable.type.ColorTypeProperty
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -65,6 +67,14 @@ sealed class ModifierProperty {
         }
     }
 
+    @Serializable
+    @SerialName("background")
+    data class Background(val color: ColorTypeProperty) : ModifierProperty() {
+        override fun applyModifier(modifier: Modifier, density: Density): Modifier {
+            return modifier.background(color.asComposeColor())
+        }
+    }
+
     abstract fun applyModifier(modifier: Modifier, density: Density): Modifier
 }
 
@@ -85,6 +95,8 @@ object ModifierPropertySerializer : KSerializer<ModifierProperty> {
                 encoder.encodeSerializableValue(ModifierProperty.Padding.serializer(), value)
             is ModifierProperty.Size ->
                 encoder.encodeSerializableValue(ModifierProperty.Size.serializer(), value)
+            is ModifierProperty.Background ->
+                encoder.encodeSerializableValue(ModifierProperty.Background.serializer(), value)
         }
     }
 
@@ -106,6 +118,8 @@ object ModifierPropertySerializer : KSerializer<ModifierProperty> {
                     decoder.decodeSerializableValue(ModifierProperty.Padding.serializer())
                 "size" in keys ->
                     decoder.decodeSerializableValue(ModifierProperty.Size.serializer())
+                "background" in keys ->
+                    decoder.decodeSerializableValue(ModifierProperty.Background.serializer())
                 else -> throw SerializationException(
                     "Unknown modifier at ${decoder.node}: keys=$keys"
                 )

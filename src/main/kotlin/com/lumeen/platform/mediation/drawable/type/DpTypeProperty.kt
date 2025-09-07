@@ -17,7 +17,7 @@ import kotlinx.serialization.encoding.Encoder
 
 @SerialName("Dp")
 @Serializable(with = DpPropertySerializer::class)
-data class DpProperty(
+data class DpTypeProperty(
     val value: Float,
     val unit: DpUnit = DpUnit.Dp,
 ) {
@@ -31,8 +31,8 @@ data class DpProperty(
     }
 
     companion object {
-        val Default = DpProperty(0f, DpUnit.Dp)
-        val Unspecified = DpProperty(0f, DpUnit.Unspecified)
+        val Default = DpTypeProperty(0f, DpUnit.Dp)
+        val Unspecified = DpTypeProperty(0f, DpUnit.Unspecified)
     }
 }
 
@@ -42,18 +42,18 @@ enum class DpUnit {
     Unspecified,
 }
 
-class DpPropertySerializer : KSerializer<DpProperty> {
+internal class DpPropertySerializer : KSerializer<DpTypeProperty> {
 
     @OptIn(InternalSerializationApi::class)
     override val descriptor: SerialDescriptor =
         buildSerialDescriptor("Dp", SerialKind.CONTEXTUAL)
 
-    override fun serialize(encoder: Encoder, value: DpProperty) {
+    override fun serialize(encoder: Encoder, value: DpTypeProperty) {
         // Serialize as the string representation
         encoder.encodeString(value.toString())
     }
 
-    override fun deserialize(decoder: Decoder): DpProperty {
+    override fun deserialize(decoder: Decoder): DpTypeProperty {
         // Handle YAML-specific decoding
         if (decoder is YamlInput) {
             return when (val node = decoder.node) {
@@ -67,31 +67,31 @@ class DpPropertySerializer : KSerializer<DpProperty> {
         return parseString(stringValue)
     }
 
-    internal fun parseString(input: String): DpProperty {
+    internal fun parseString(input: String): DpTypeProperty {
         val trimmed = input.trim()
 
         return when {
-            trimmed.equals("Unspecified", ignoreCase = true) -> DpProperty.Unspecified
+            trimmed.equals("Unspecified", ignoreCase = true) -> DpTypeProperty.Unspecified
 
             trimmed.endsWith(".dp", ignoreCase = true) -> {
                 val valueStr = trimmed.dropLast(3) // Remove ".dp"
                 val value = valueStr.toFloatOrNull()
                     ?: throw SerializationException("Invalid dp value: '$valueStr' in '$input'")
-                DpProperty(value, DpUnit.Dp)
+                DpTypeProperty(value, DpUnit.Dp)
             }
 
             trimmed.endsWith(".px", ignoreCase = true) -> {
                 val valueStr = trimmed.dropLast(3) // Remove ".px"
                 val value = valueStr.toFloatOrNull()
                     ?: throw SerializationException("Invalid px value: '$valueStr' in '$input'")
-                DpProperty(value, DpUnit.Px)
+                DpTypeProperty(value, DpUnit.Px)
             }
 
             else -> {
                 // Try to parse as a plain number (assume dp)
                 val value = trimmed.toFloatOrNull()
                 if (value != null) {
-                    DpProperty(value, DpUnit.Dp)
+                    DpTypeProperty(value, DpUnit.Dp)
                 } else {
                     throw SerializationException("Invalid DpProperty format: '$input'. Expected formats: '15.dp', '15.5.dp', '15.px', '15.5.px', or 'Unspecified'")
                 }

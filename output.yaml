@@ -2,6 +2,9 @@ name: "ExampleStruct"
 modifiers:
 - size: { h: 500 }
 - degrees: 5.0
+- background:
+  color: { r: 255, g: 0, b: 255, a: 255 }
+
 - scale: { x: 1.0, y: 1.0 }
 - alpha: 0.8
 - padding: { l: 10, t: 12, b: 10, r: 10 }

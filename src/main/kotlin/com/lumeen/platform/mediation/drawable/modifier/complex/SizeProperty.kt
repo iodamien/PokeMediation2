@@ -1,10 +1,9 @@
 package com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.complex
 
-import androidx.compose.ui.graphics.Color
 import com.charleskorn.kaml.YamlInput
 import com.charleskorn.kaml.YamlMap
 import com.charleskorn.kaml.YamlScalar
-import com.lumeen.platform.com.lumeen.platform.mediation.drawable.type.DpProperty
+import com.lumeen.platform.com.lumeen.platform.mediation.drawable.type.DpTypeProperty
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.type.DpPropertySerializer
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.KSerializer
@@ -19,18 +18,16 @@ import kotlinx.serialization.descriptors.element
 import kotlinx.serialization.encoding.CompositeDecoder
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import kotlin.text.toFloatOrNull
-import kotlin.text.toIntOrNull
 
 @Serializable(with = SizeSerializer::class)
 @SerialName("Size")
 data class SizeProperty(
-    val width: DpProperty = DpProperty.Unspecified,
-    val height: DpProperty = DpProperty.Unspecified,
+    val width: DpTypeProperty = DpTypeProperty.Unspecified,
+    val height: DpTypeProperty = DpTypeProperty.Unspecified,
 ) {
 
     companion object {
-        fun from(size: DpProperty) = SizeProperty(
+        fun from(size: DpTypeProperty) = SizeProperty(
             width = size,
             height = size,
         )
@@ -60,12 +57,12 @@ object SizeSerializer: KSerializer<SizeProperty> {
                     SizeProperty.from(dpValue)
                 }
                 is YamlMap -> {
-                    fun getDpProperty(key: String): DpProperty {
+                    fun getDpProperty(key: String): DpTypeProperty {
                         val content = node.get<YamlScalar>(key)?.content
                         return if (content != null) {
                             parseDpProperty(content)
                         } else {
-                            DpProperty.Unspecified
+                            DpTypeProperty.Unspecified
                         }
                     }
 
@@ -91,9 +88,9 @@ object SizeSerializer: KSerializer<SizeProperty> {
             SizeProperty.from(parseDpProperty(singleValue))
         } catch (_: Exception) {
             // Try to decode as a structured object
-            var width = DpProperty.Default
-            var height = DpProperty.Default
-            var value: DpProperty? = null
+            var width = DpTypeProperty.Default
+            var height = DpTypeProperty.Default
+            var value: DpTypeProperty? = null
 
             val c = decoder.beginStructure(buildClassSerialDescriptor("SizeMap") {
                 element<String>("w", isOptional = true)
@@ -115,7 +112,7 @@ object SizeSerializer: KSerializer<SizeProperty> {
         }
     }
 
-    private fun parseDpProperty(content: String): DpProperty {
+    private fun parseDpProperty(content: String): DpTypeProperty {
         val dpSerializer = DpPropertySerializer()
         return dpSerializer.parseString(content)
     }
