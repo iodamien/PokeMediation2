@@ -15,10 +15,10 @@ import kotlinx.serialization.encoding.Encoder
 @SerialName("Padding")
 @Serializable(with = PaddingSerializer::class)
 data class PaddingProperty(
-    val left: DpTypeProperty = DpTypeProperty.Default,
-    val top: DpTypeProperty = DpTypeProperty.Default,
-    val right: DpTypeProperty = DpTypeProperty.Default,
-    val bottom: DpTypeProperty = DpTypeProperty.Default,
+    val left: DpTypeProperty = DpTypeProperty.Zero,
+    val top: DpTypeProperty = DpTypeProperty.Zero,
+    val right: DpTypeProperty = DpTypeProperty.Zero,
+    val bottom: DpTypeProperty = DpTypeProperty.Zero,
 ) {
     companion object {
         fun all(v: DpTypeProperty) = PaddingProperty(v, v, v, v)
@@ -44,7 +44,7 @@ object PaddingSerializer : KSerializer<PaddingProperty> {
                         return if (content != null) {
                             parseDpProperty(content)
                         } else {
-                            DpTypeProperty.Default
+                            DpTypeProperty.Zero
                         }
                     }
 
@@ -72,10 +72,10 @@ object PaddingSerializer : KSerializer<PaddingProperty> {
             PaddingProperty.all(parseDpProperty(singleValue))
         } catch (_: Exception) {
             // Try to decode as a structured object
-            var left = DpTypeProperty.Default
-            var top = DpTypeProperty.Default
-            var right = DpTypeProperty.Default
-            var bottom = DpTypeProperty.Default
+            var left = DpTypeProperty.Zero
+            var top = DpTypeProperty.Zero
+            var right = DpTypeProperty.Zero
+            var bottom = DpTypeProperty.Zero
             var value: DpTypeProperty? = null
 
             val c = decoder.beginStructure(buildClassSerialDescriptor("PaddingMap") {

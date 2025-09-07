@@ -88,8 +88,8 @@ object SizeSerializer: KSerializer<SizeProperty> {
             SizeProperty.from(parseDpProperty(singleValue))
         } catch (_: Exception) {
             // Try to decode as a structured object
-            var width = DpTypeProperty.Default
-            var height = DpTypeProperty.Default
+            var width = DpTypeProperty.Zero
+            var height = DpTypeProperty.Zero
             var value: DpTypeProperty? = null
 
             val c = decoder.beginStructure(buildClassSerialDescriptor("SizeMap") {

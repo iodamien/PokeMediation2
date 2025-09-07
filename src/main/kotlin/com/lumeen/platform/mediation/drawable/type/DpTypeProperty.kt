@@ -31,7 +31,7 @@ data class DpTypeProperty(
     }
 
     companion object {
-        val Default = DpTypeProperty(0f, DpUnit.Dp)
+        val Zero = DpTypeProperty(0f, DpUnit.Dp)
         val Unspecified = DpTypeProperty(0f, DpUnit.Unspecified)
     }
 }

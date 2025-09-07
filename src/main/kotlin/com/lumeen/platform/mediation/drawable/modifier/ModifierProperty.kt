@@ -14,6 +14,7 @@ import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.compl
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.complex.ScaleProperty
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.complex.SizeProperty
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.type.ColorTypeProperty
+import com.lumeen.platform.com.lumeen.platform.mediation.drawable.type.ShapeTypeProperty
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -69,9 +70,15 @@ sealed class ModifierProperty {
 
     @Serializable
     @SerialName("background")
-    data class Background(val color: ColorTypeProperty) : ModifierProperty() {
+    data class Background(
+        val color: ColorTypeProperty,
+        val shape: ShapeTypeProperty,
+    ) : ModifierProperty() {
         override fun applyModifier(modifier: Modifier, density: Density): Modifier {
-            return modifier.background(color.asComposeColor())
+            return modifier.background(
+                color = color.asComposeColor(),
+                shape = shape.asComposeShape(density),
+            )
         }
     }
 
