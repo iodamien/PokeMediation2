@@ -11,17 +11,13 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.unit.Density
 import com.charleskorn.kaml.YamlInput
 import com.charleskorn.kaml.YamlMap
-import com.charleskorn.kaml.YamlNode
-import com.charleskorn.kaml.YamlScalar
 import com.charleskorn.kaml.yamlMap
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.complex.PaddingProperty
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.complex.ScaleProperty
-import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.complex.ScaleSerializer
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.complex.SizeProperty
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.type.ColorTypeProperty
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.type.ShapeSerializer
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.type.ShapeTypeProperty
-import com.lumeen.platform.yaml
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -157,4 +153,10 @@ object ModifierPropertySerializer : KSerializer<ModifierProperty> {
             )
         }
     }
+}
+
+fun List<ModifierProperty>.applyModifiers(density: Density, modifier: Modifier = Modifier): Modifier {
+    var m = modifier
+    forEach { m = it.applyModifier(m, density) }
+    return m
 }

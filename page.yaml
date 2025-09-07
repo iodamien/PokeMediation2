@@ -1,0 +1,20 @@
+root:
+  !<Box>
+  modifier:
+  - size: { w: 1280, h: 720 }
+#  - degrees: 4.0
+  - padding: 32
+  - clip: { type: Rounded, topLeft: 29, topRight: 30, botLeft: 30, botRight: 30 }
+  - background:
+    color: { r: 0, g: 0, b: 255, a: 100 }
+  - scale: { x: 1.0, y: 1.0 }
+#  - alpha: -1.8
+  - padding: 64
+  child:
+  - !<Text>
+    modifier:
+    - background:
+      shape: { type: Rounded, topLeft: 10, topRight: 10, botLeft: 10, botRight: 10 }
+      color: Green
+    - padding: 32
+    text: "Hello World!!!!"
