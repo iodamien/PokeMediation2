@@ -1,0 +1,37 @@
+[versions]
+jadb = "1.2.1"
+compose = "1.8.1"
+kotlin = "2.0.21"
+coroutines = "1.10.1"
+koin = "4.0.1"
+viewmodel = "2.8.2"
+ffmpeg = "1.5.11"
+jnativehook = "2.2.2"
+filekit = "0.10.0-beta04"
+couroutines-swing = "1.10.2"
+color-picker-compose = "1.1.2"
+opencv = "4.9.0-0"
+kaml = "0.94.0"
+
+[libraries]
+coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
+jadb = { group = "com.github.vidstige", name = "jadb", version.ref = "jadb" }
+koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
+koin-viewmodel = { group = "io.insert-koin", name = "koin-compose-viewmodel", version.ref = "koin" }
+viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "viewmodel" }
+ffmpeg = { module = "org.bytedeco:javacv-platform", version.ref = "ffmpeg" }
+jnativehook = { module = "com.github.kwhat:jnativehook", version.ref = "jnativehook" }
+filekit-core = { group = "io.github.vinceglb", name = "filekit-core", version.ref = "filekit" }
+filekit-dialogs = { group = "io.github.vinceglb", name = "filekit-dialogs", version.ref = "filekit" }
+filekit-compose = { group = "io.github.vinceglb", name = "filekit-dialogs-compose", version.ref = "filekit" }
+filekit-coil = { group = "io.github.vinceglb", name = "filekit-coil", version.ref = "filekit" }
+coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "couroutines-swing" }
+color-picker-compose = { group = "com.github.skydoves", name = "colorpicker-compose", version.ref = "color-picker-compose" }
+opencv = { group = "org.openpnp", name = "opencv", version.ref = "opencv" }
+kaml = { group = "com.charleskorn.kaml", name = "kaml", version.ref = "kaml" }
+
+[plugins]
+
+[bundles]
+koin = ["koin-core", "koin-viewmodel"]
+filekit = ["filekit-core", "filekit-dialogs", "filekit-compose", "filekit-coil"]
