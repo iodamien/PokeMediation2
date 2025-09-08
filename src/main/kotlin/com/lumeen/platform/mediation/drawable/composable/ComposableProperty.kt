@@ -2,6 +2,7 @@ package com.lumeen.platform.com.lumeen.platform.mediation.drawable.composable
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.Density
+import com.lumeen.platform.com.lumeen.platform.mediation.drawable.layout.LayoutScope
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.ModifierProperty
 
 interface ComposableProperty {
@@ -9,5 +10,5 @@ interface ComposableProperty {
     val modifier: List<ModifierProperty>
 
     @Composable
-    fun drawCompose(density: Density)
+    fun drawCompose(density: Density, layoutScope: LayoutScope)
 }

@@ -32,6 +32,29 @@ root:
 #  - alpha: -1.8
   - padding: 16
   child:
+  - !<Row>
+    modifier:
+      - fill-max-width: 1
+      - size: { h: 80 }
+      - background:
+        color: Black
+    child:
+      - !<Text>
+        text: "Hello World!"
+        color: White
+      - !<Box>
+        modifier:
+          - size: { h: 80 }
+          - weight: 1
+          - background:
+            color: Green
+      - !<Box>
+        modifier:
+          - size: { h: 80 }
+          - weight: 4
+          - background:
+            color: Blue
+
   - !<Image>
     modifier:
       - background:

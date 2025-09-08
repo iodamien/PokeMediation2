@@ -10,6 +10,7 @@ import androidx.compose.ui.unit.Density
 import com.charleskorn.kaml.YamlInput
 import com.charleskorn.kaml.YamlMap
 import com.charleskorn.kaml.yamlMap
+import com.lumeen.platform.com.lumeen.platform.mediation.drawable.layout.LayoutScope
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.complex.PaddingProperty
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.complex.ScaleProperty
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.complex.SizeProperty
@@ -37,7 +38,8 @@ sealed class ModifierProperty {
     ): ModifierProperty() {
         override fun applyModifier(
             modifier: Modifier,
-            density: Density
+            density: Density,
+            layoutScope: LayoutScope
         ): Modifier = modifier.fillMaxWidth(fraction)
     }
 
@@ -48,7 +50,8 @@ sealed class ModifierProperty {
     ): ModifierProperty() {
         override fun applyModifier(
             modifier: Modifier,
-            density: Density
+            density: Density,
+            layoutScope: LayoutScope
         ): Modifier = modifier.fillMaxHeight(fraction)
     }
 
@@ -60,32 +63,33 @@ sealed class ModifierProperty {
     ): ModifierProperty() {
         override fun applyModifier(
             modifier: Modifier,
-            density: Density
+            density: Density,
+            layoutScope: LayoutScope
         ): Modifier = modifier.fillMaxSize(fraction)
     }
 
     @Serializable
     @SerialName("rotate")
     data class Rotate(val rotate: Float) : ModifierProperty() {
-        override fun applyModifier(modifier: Modifier, density: Density): Modifier = modifier.rotate(rotate)
+        override fun applyModifier(modifier: Modifier, density: Density, layoutScope: LayoutScope): Modifier = modifier.rotate(rotate)
     }
 
     @Serializable
     @SerialName("scale")
     data class Scale(val scale: ScaleProperty) : ModifierProperty() {
-        override fun applyModifier(modifier: Modifier, density: Density): Modifier = modifier.scale(scale.x, scale.y)
+        override fun applyModifier(modifier: Modifier, density: Density, layoutScope: LayoutScope): Modifier = modifier.scale(scale.x, scale.y)
     }
 
     @Serializable
     @SerialName("alpha")
     data class Alpha(val alpha: Float) : ModifierProperty() {
-        override fun applyModifier(modifier: Modifier, density: Density): Modifier = modifier.alpha(alpha)
+        override fun applyModifier(modifier: Modifier, density: Density, layoutScope: LayoutScope): Modifier = modifier.alpha(alpha)
     }
 
     @Serializable
     @SerialName("padding")
     data class Padding(val padding: PaddingProperty) : ModifierProperty() {
-        override fun applyModifier(modifier: Modifier, density: Density): Modifier = modifier.padding(
+        override fun applyModifier(modifier: Modifier, density: Density, layoutScope: LayoutScope): Modifier = modifier.padding(
             start = padding.left.toComposeDp(density),
             top = padding.top.toComposeDp(density),
             end = padding.right.toComposeDp(density),
@@ -96,7 +100,7 @@ sealed class ModifierProperty {
     @Serializable
     @SerialName("size")
     data class Size(val size: SizeProperty) : ModifierProperty() {
-        override fun applyModifier(modifier: Modifier, density: Density): Modifier {
+        override fun applyModifier(modifier: Modifier, density: Density, layoutScope: LayoutScope): Modifier {
             return modifier.size(
                 width = size.width.toComposeDp(density),
                 height = size.height.toComposeDp(density),
@@ -110,7 +114,7 @@ sealed class ModifierProperty {
         val color: ColorTypeProperty = ColorTypeProperty.Unspecified,
         val shape: ShapeTypeProperty = ShapeTypeProperty.Rectangle,
     ) : ModifierProperty() {
-        override fun applyModifier(modifier: Modifier, density: Density): Modifier = modifier.background(
+        override fun applyModifier(modifier: Modifier, density: Density, layoutScope: LayoutScope): Modifier = modifier.background(
             color = color.asComposeColor(),
             shape = shape.asComposeShape(density),
         )
@@ -121,7 +125,7 @@ sealed class ModifierProperty {
     data class Clip(
         val shape: ShapeTypeProperty,
     ) : ModifierProperty() {
-        override fun applyModifier(modifier: Modifier, density: Density): Modifier = modifier.clip(shape.asComposeShape(density))
+        override fun applyModifier(modifier: Modifier, density: Density, layoutScope: LayoutScope): Modifier = modifier.clip(shape.asComposeShape(density))
     }
 
     @Serializable
@@ -131,7 +135,7 @@ sealed class ModifierProperty {
         val width: DpTypeProperty = DpTypeProperty(1f),
         val shape: ShapeTypeProperty = ShapeTypeProperty.Rectangle,
     ) : ModifierProperty() {
-        override fun applyModifier(modifier: Modifier, density: Density): Modifier {
+        override fun applyModifier(modifier: Modifier, density: Density, layoutScope: LayoutScope): Modifier {
             return modifier
                 .border(
                     width = width.toComposeDp(density),
@@ -143,13 +147,13 @@ sealed class ModifierProperty {
 
     @Serializable
     @SerialName("drop-shadow")
-    class DropShadow(
+    data class DropShadow(
         val radius: DpTypeProperty = DpTypeProperty(4f),
         val spread: DpTypeProperty = DpTypeProperty(4f),
         val opacity: Float = 0.5f,
         val color: ColorTypeProperty = ColorTypeProperty.Black,
     ) : ModifierProperty() {
-        override fun applyModifier(modifier: Modifier, density: Density): Modifier = modifier
+        override fun applyModifier(modifier: Modifier, density: Density, layoutScope: LayoutScope): Modifier = modifier
             .dropShadow(
                 shape = RectangleShape,
                 shadow = androidx.compose.ui.graphics.shadow.Shadow(
@@ -163,13 +167,13 @@ sealed class ModifierProperty {
 
     @Serializable
     @SerialName("inner-shadow")
-    class InnerShadow(
+    data class InnerShadow(
         val radius: DpTypeProperty = DpTypeProperty(4f),
         val spread: DpTypeProperty = DpTypeProperty(4f),
         val opacity: Float = 0.5f,
         val color: ColorTypeProperty = ColorTypeProperty.Black,
     ) : ModifierProperty() {
-        override fun applyModifier(modifier: Modifier, density: Density): Modifier = modifier
+        override fun applyModifier(modifier: Modifier, density: Density, layoutScope: LayoutScope): Modifier = modifier
             .innerShadow(
                 shape = RectangleShape,
                 shadow = androidx.compose.ui.graphics.shadow.Shadow(
@@ -181,7 +185,31 @@ sealed class ModifierProperty {
             )
     }
 
-    abstract fun applyModifier(modifier: Modifier, density: Density): Modifier
+    @Serializable
+    @SerialName("weight")
+    data class Weight(
+        val weight: Float
+    ): ModifierProperty() {
+        override fun applyModifier(
+            modifier: Modifier,
+            density: Density,
+            layoutScope: LayoutScope
+        ): Modifier = when (layoutScope) {
+            is LayoutScope.RowLayoutScope -> with(layoutScope.rowScope) {
+                modifier.weight(weight)
+            }
+            is LayoutScope.ColumnLayoutScope -> with(layoutScope.columnScope) {
+                modifier.weight(weight)
+            }
+            else -> modifier
+        }
+    }
+
+    abstract fun applyModifier(
+        modifier: Modifier,
+        density: Density,
+        layoutScope: LayoutScope,
+    ): Modifier
 }
 
 object ModifierPropertySerializer : KSerializer<ModifierProperty> {
@@ -191,6 +219,8 @@ object ModifierPropertySerializer : KSerializer<ModifierProperty> {
 
     override fun serialize(encoder: Encoder, value: ModifierProperty) {
         when (value) {
+            is ModifierProperty.Weight ->
+                encoder.encodeSerializableValue(ModifierProperty.Weight.serializer(), value)
             is ModifierProperty.Rotate ->
                 encoder.encodeSerializableValue(ModifierProperty.Rotate.serializer(), value)
             is ModifierProperty.Scale  ->
@@ -256,6 +286,8 @@ object ModifierPropertySerializer : KSerializer<ModifierProperty> {
                     )
                 "border" in keys ->
                     decoder.decodeSerializableValue(ModifierProperty.Border.serializer())
+                "weight" in keys ->
+                    decoder.decodeSerializableValue(ModifierProperty.Weight.serializer())
                 else -> throw SerializationException(
                     "Unknown modifier at ${decoder.node}: keys=$keys"
                 )
@@ -269,8 +301,8 @@ object ModifierPropertySerializer : KSerializer<ModifierProperty> {
     }
 }
 
-fun List<ModifierProperty>.applyModifiers(density: Density, modifier: Modifier = Modifier): Modifier {
+fun List<ModifierProperty>.applyModifiers(density: Density, layoutScope: LayoutScope, modifier: Modifier = Modifier): Modifier {
     var m = modifier
-    forEach { m = it.applyModifier(m, density) }
+    forEach { m = it.applyModifier(m, density, layoutScope) }
     return m
 }

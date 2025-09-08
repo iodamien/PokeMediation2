@@ -1,7 +1,6 @@
 package com.lumeen.platform.com.lumeen.platform.mediation.drawable.layout
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.Density
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.composable.ComposableProperty
@@ -20,12 +19,12 @@ data class BoxLayout(
 ): LayoutProperty {
 
     @Composable
-    override fun drawCompose(density: Density) {
+    override fun drawCompose(density: Density, layoutScope: LayoutScope) {
         Box(
-            modifier = modifier.applyModifiers(density),
+            modifier = modifier.applyModifiers(density, layoutScope),
             contentAlignment = contentAlignment.asCompose(),
         ) {
-            child.forEach { it.drawCompose(density) }
+            child.forEach { it.drawCompose(density, asLayoutScope()) }
         }
     }
 }

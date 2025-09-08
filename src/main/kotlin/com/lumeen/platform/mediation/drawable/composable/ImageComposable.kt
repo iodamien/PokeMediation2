@@ -4,17 +4,14 @@ import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.toPainter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Density
-import com.charleskorn.kaml.YamlInput
 import com.charleskorn.kaml.YamlList
 import com.charleskorn.kaml.YamlMap
 import com.charleskorn.kaml.YamlNode
 import com.charleskorn.kaml.YamlScalar
+import com.lumeen.platform.com.lumeen.platform.mediation.drawable.layout.LayoutScope
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.ModifierProperty
-import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.ModifierPropertySerializer
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.applyModifiers
-import com.lumeen.platform.module
 import com.lumeen.platform.yaml
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.KSerializer
@@ -42,9 +39,9 @@ data class ImageComposable(
 ): ComposableProperty {
 
     @Composable
-    override fun drawCompose(density: Density) {
+    override fun drawCompose(density: Density, layoutScope: LayoutScope) {
         Image(
-            modifier = modifier.applyModifiers(density),
+            modifier = modifier.applyModifiers(density, layoutScope),
             contentDescription = null,
             painter = painter,
         )

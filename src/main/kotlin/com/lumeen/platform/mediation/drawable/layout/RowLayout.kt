@@ -21,13 +21,13 @@ data class RowLayout(
 ): LayoutProperty {
 
     @Composable
-    override fun drawCompose(density: Density) {
+    override fun drawCompose(density: Density, layoutScope: LayoutScope) {
         Row(
-            modifier = modifier.applyModifiers(density),
+            modifier = modifier.applyModifiers(density, layoutScope),
             verticalAlignment = verticalAlignment.asCompose(),
             horizontalArrangement = horizontalArrangementProperty.asCompose(density),
         ) {
-            child.forEach { it.drawCompose(density) }
+            child.forEach { it.drawCompose(density, asLayoutScope()) }
         }
     }
 }
