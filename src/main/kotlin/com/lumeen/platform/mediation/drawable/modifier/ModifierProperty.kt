@@ -161,6 +161,26 @@ sealed class ModifierProperty {
             )
     }
 
+    @Serializable
+    @SerialName("inner-shadow")
+    class InnerShadow(
+        val radius: DpTypeProperty = DpTypeProperty(4f),
+        val spread: DpTypeProperty = DpTypeProperty(4f),
+        val opacity: Float = 0.5f,
+        val color: ColorTypeProperty = ColorTypeProperty.Black,
+    ) : ModifierProperty() {
+        override fun applyModifier(modifier: Modifier, density: Density): Modifier = modifier
+            .innerShadow(
+                shape = RectangleShape,
+                shadow = androidx.compose.ui.graphics.shadow.Shadow(
+                    radius = radius.toComposeDp(density),
+                    color = color.asComposeColor(),
+                    spread = spread.toComposeDp(density),
+                    alpha = opacity,
+                )
+            )
+    }
+
     abstract fun applyModifier(modifier: Modifier, density: Density): Modifier
 }
 
@@ -189,6 +209,8 @@ object ModifierPropertySerializer : KSerializer<ModifierProperty> {
                 encoder.encodeSerializableValue(ModifierProperty.Border.serializer(), value)
             is ModifierProperty.DropShadow ->
                 encoder.encodeSerializableValue(ModifierProperty.DropShadow.serializer(), value)
+            is ModifierProperty.InnerShadow ->
+                encoder.encodeSerializableValue(ModifierProperty.InnerShadow.serializer(), value)
             is ModifierProperty.FillMaxHeight ->
                 encoder.encodeSerializableValue(ModifierProperty.FillMaxHeight.serializer(), value)
             is ModifierProperty.FillMaxSize ->
@@ -214,6 +236,8 @@ object ModifierPropertySerializer : KSerializer<ModifierProperty> {
                     decoder.decodeSerializableValue(ModifierProperty.FillMaxSize.serializer())
                 "drop-shadow" in keys ->
                     decoder.decodeSerializableValue(ModifierProperty.DropShadow.serializer())
+                "inner-shadow" in keys ->
+                    decoder.decodeSerializableValue(ModifierProperty.InnerShadow.serializer())
                 "rotate" in keys ->
                     decoder.decodeSerializableValue(ModifierProperty.Rotate.serializer())
                 "scale" in keys ->
