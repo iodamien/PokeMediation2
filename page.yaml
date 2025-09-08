@@ -1,5 +1,5 @@
 root:
-  !<Box>
+  !<Column>
   modifier:
   - size: { w: 1280, h: 720 }
   - rotate: 0
@@ -14,10 +14,24 @@ root:
 #  - alpha: -1.8
   - padding: 64
   child:
+  - !<Image>
+    modifier:
+      - background:
+        color: { r: 255, g: 0, b: 0, a: 100 }
+        shape: { type: Rounded, topLeft: 10, topRight: 10, botLeft: 10, botRight: 10 }
+      - scale: { x: 0.5, y: 0.5 }
+    path: /home/irouva/Downloads/Capture.png
   - !<Text>
     modifier:
     - background:
       shape: { type: Rounded, topLeft: 10, topRight: 10, botLeft: 10, botRight: 10 }
-      color: Green
+      color: Red
     - padding: 32
     text: "Hello World!"
+  - !<Text>
+    modifier:
+      - background:
+        shape: { type: Rounded, topLeft: 10, topRight: 10, botLeft: 10, botRight: 10 }
+        color: Red
+      - padding: 32
+    text: "Hello World DEXX!"

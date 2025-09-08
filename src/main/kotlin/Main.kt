@@ -18,9 +18,11 @@ import com.charleskorn.kaml.SequenceStyle
 import com.charleskorn.kaml.Yaml
 import com.charleskorn.kaml.YamlConfiguration
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.composable.ComposableProperty
+import com.lumeen.platform.com.lumeen.platform.mediation.drawable.composable.ImageComposable
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.composable.TextComposable
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.layout.BoxLayout
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.layout.LayoutProperty
+import com.lumeen.platform.com.lumeen.platform.mediation.drawable.layout.ColumnLayout
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.mediation.Page
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.ModifierProperty
 import kotlinx.coroutines.Dispatchers
@@ -59,10 +61,12 @@ val module = SerializersModule {
 
     polymorphic(ComposableProperty::class) {
         subclass(TextComposable::class)
+        subclass(ImageComposable::class)
     }
 
     polymorphic(LayoutProperty::class) {
         subclass(BoxLayout::class)
+        subclass(ColumnLayout::class)
     }
 }
 
