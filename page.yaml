@@ -12,7 +12,7 @@ root:
   - padding: 64
   child:
   - !<Text>
-    color: Red
+    color: Re
     modifier:
     - background:
       shape: { type: Rounded, topLeft: 10, topRight: 10, botLeft: 10, botRight: 10 }
