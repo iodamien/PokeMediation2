@@ -37,6 +37,8 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
+import java.awt.image.BufferedImage
+import java.io.ByteArrayInputStream
 import java.io.File
 import java.nio.file.FileSystems
 import java.nio.file.Path
@@ -45,6 +47,8 @@ import java.nio.file.StandardWatchEventKinds.ENTRY_DELETE
 import java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY
 import java.nio.file.StandardWatchEventKinds.OVERFLOW
 import java.nio.file.WatchEvent
+import java.util.Base64
+import javax.imageio.ImageIO
 import kotlin.time.Duration.Companion.seconds
 
 val module = SerializersModule {

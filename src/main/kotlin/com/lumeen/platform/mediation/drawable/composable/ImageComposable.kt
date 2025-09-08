@@ -27,7 +27,10 @@ import kotlinx.serialization.descriptors.SerialKind
 import kotlinx.serialization.descriptors.buildSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import java.awt.image.BufferedImage
+import java.io.ByteArrayInputStream
 import java.io.File
+import java.util.Base64
 import javax.imageio.ImageIO
 import kotlin.collections.emptyList
 
@@ -67,6 +70,7 @@ class ImageSerializer: KSerializer<ImageComposable> {
                     node.get<YamlScalar>(key)?.content ?: default
 
                 val path = getString("path", "")
+                val base64 = getString("base64", "")
                 val modifier = node.get<YamlNode>("modifier")?.let { modifierNode ->
                     when (modifierNode) {
                         is YamlList -> {
@@ -90,6 +94,11 @@ class ImageSerializer: KSerializer<ImageComposable> {
                 } ?: emptyList()
 
                 val painter = when {
+                    base64.isNotEmpty() -> {
+                        val img = base64ToBufferedImage(base64)
+                            ?: throw SerializationException("Failed to decode Base64 image")
+                        img.toPainter()
+                    }
                     path.isNotEmpty() -> {
                         val imgFile = File(path)
                         if (imgFile.exists()) {
@@ -112,3 +121,25 @@ class ImageSerializer: KSerializer<ImageComposable> {
     }
 }
 
+fun base64ToBufferedImage(base64String: String): BufferedImage? {
+    return try {
+        // Remove data URL prefix if present (e.g., "data:image/png;base64,")
+        val base64Data = if (base64String.contains(",")) {
+            base64String.substringAfter(",")
+        } else {
+            base64String
+        }
+
+        // Decode Base64 string to byte array
+        val imageBytes = Base64.getDecoder().decode(base64Data)
+
+        // Create ByteArrayInputStream from byte array
+        val inputStream = ByteArrayInputStream(imageBytes)
+
+        // Read the image from the input stream
+        ImageIO.read(inputStream)
+    } catch (e: Exception) {
+        println("Error converting Base64 to BufferedImage: ${e.message}")
+        null
+    }
+}
