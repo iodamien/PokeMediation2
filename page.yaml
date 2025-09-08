@@ -1,5 +1,9 @@
 root:
   !<Column>
+  horizontal-alignment: Center
+  vertical-arrangement:
+    space: 8
+    align: Center
   modifier:
   - size: { w: 1280, h: 720 }
   - rotate: 0
@@ -12,7 +16,7 @@ root:
     width: 2
     shape: { type: Rounded, topLeft: 30, topRight: 30, botLeft: 30, botRight: 30 }
 #  - alpha: -1.8
-  - padding: 64
+  - padding: 16
   child:
   - !<Image>
     modifier:
@@ -34,4 +38,24 @@ root:
         shape: { type: Rounded, topLeft: 10, topRight: 10, botLeft: 10, botRight: 10 }
         color: Red
       - padding: 32
-    text: "Hello World DEXX!"
+    text: "Row bottom"
+    font-size: 24
+  - !<Row>
+    vertical-alignment: Center
+    horizontal-arrangement:
+      space: 8
+      align: Center
+    modifier:
+    - rotate: 0
+    - background:
+      color: { r: 255, g: 0, b: 255, a: 255 }
+    - padding: 16
+    child:
+    - !<Image>
+      path: /home/irouva/Downloads/Capture.png
+    - !<Image>
+      path: /home/irouva/Downloads/Capture.png
+    - !<Text>
+        text: "Row Center"
+        color: White
+        font-size: 24

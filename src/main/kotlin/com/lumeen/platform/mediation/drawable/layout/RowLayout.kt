@@ -1,31 +1,31 @@
 package com.lumeen.platform.com.lumeen.platform.mediation.drawable.layout
 
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.Density
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.composable.ComposableProperty
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.ModifierProperty
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.applyModifiers
-import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.type.HorizontalAlignmentProperty
-import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.type.VerticalArrangementProperty
+import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.type.VerticalAlignmentProperty
+import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.type.HorizontalArrangementProperty
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName("Column")
-data class ColumnLayout(
+@SerialName("Row")
+data class RowLayout(
     override val modifier: List<ModifierProperty> = emptyList(),
     override val child: List<ComposableProperty> = emptyList(),
-    @SerialName("horizontal-alignment") val horizontalAlignment: HorizontalAlignmentProperty = HorizontalAlignmentProperty.Start,
-    @SerialName("vertical-arrangement") val verticalArrangementProperty: VerticalArrangementProperty = VerticalArrangementProperty(),
+    @SerialName("vertical-alignment") val verticalAlignment: VerticalAlignmentProperty = VerticalAlignmentProperty.Top,
+    @SerialName("horizontal-arrangement") val horizontalArrangementProperty: HorizontalArrangementProperty = HorizontalArrangementProperty(),
 ): LayoutProperty {
 
     @Composable
     override fun drawCompose(density: Density) {
-        Column(
+        Row(
             modifier = modifier.applyModifiers(density),
-            horizontalAlignment = horizontalAlignment.asCompose(),
-            verticalArrangement = verticalArrangementProperty.asCompose(density),
+            verticalAlignment = verticalAlignment.asCompose(),
+            horizontalArrangement = horizontalArrangementProperty.asCompose(density),
         ) {
             child.forEach { it.drawCompose(density) }
         }

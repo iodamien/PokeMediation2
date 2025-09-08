@@ -2,6 +2,7 @@ package com.lumeen.platform
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.material.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -23,6 +24,7 @@ import com.lumeen.platform.com.lumeen.platform.mediation.drawable.composable.Tex
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.layout.BoxLayout
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.layout.LayoutProperty
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.layout.ColumnLayout
+import com.lumeen.platform.com.lumeen.platform.mediation.drawable.layout.RowLayout
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.mediation.Page
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.ModifierProperty
 import kotlinx.coroutines.Dispatchers
@@ -66,11 +68,16 @@ val module = SerializersModule {
     polymorphic(ComposableProperty::class) {
         subclass(TextComposable::class)
         subclass(ImageComposable::class)
+
+        subclass(BoxLayout::class)
+        subclass(ColumnLayout::class)
+        subclass(RowLayout::class)
     }
 
     polymorphic(LayoutProperty::class) {
         subclass(BoxLayout::class)
         subclass(ColumnLayout::class)
+        subclass(RowLayout::class)
     }
 }
 

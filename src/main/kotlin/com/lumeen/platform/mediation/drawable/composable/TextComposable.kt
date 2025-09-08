@@ -16,7 +16,7 @@ import kotlinx.serialization.Serializable
 data class TextComposable(
     val text: String,
     val color: ColorTypeProperty = ColorTypeProperty.Unspecified,
-    val fontSize: SpTypeProperty = SpTypeProperty(14f, SpUnit.Sp),
+    @SerialName("font-size") val fontSize: SpTypeProperty = SpTypeProperty(14f, SpUnit.Sp),
     override val modifier: List<ModifierProperty> = emptyList(),
 ): ComposableProperty {
 
