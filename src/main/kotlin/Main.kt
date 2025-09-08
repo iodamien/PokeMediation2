@@ -54,6 +54,7 @@ val module = SerializersModule {
         subclass(ModifierProperty.Size::class)
         subclass(ModifierProperty.Background::class)
         subclass(ModifierProperty.Clip::class)
+        subclass(ModifierProperty.Border::class)
     }
 
     polymorphic(ComposableProperty::class) {

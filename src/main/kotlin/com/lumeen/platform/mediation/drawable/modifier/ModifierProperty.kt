@@ -1,6 +1,7 @@
 package com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.ui.Modifier
@@ -16,6 +17,7 @@ import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.compl
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.complex.ScaleProperty
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.complex.SizeProperty
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.type.ColorTypeProperty
+import com.lumeen.platform.com.lumeen.platform.mediation.drawable.type.DpTypeProperty
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.type.ShapeSerializer
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.type.ShapeTypeProperty
 import kotlinx.serialization.KSerializer
@@ -91,6 +93,23 @@ sealed class ModifierProperty {
         override fun applyModifier(modifier: Modifier, density: Density): Modifier = modifier.clip(shape.asComposeShape(density))
     }
 
+    @Serializable
+    @SerialName("border")
+    data class Border(
+        val color: ColorTypeProperty = ColorTypeProperty.Unspecified,
+        val width: DpTypeProperty = DpTypeProperty(1f),
+        val shape: ShapeTypeProperty = ShapeTypeProperty.Rectangle,
+    ) : ModifierProperty() {
+        override fun applyModifier(modifier: Modifier, density: Density): Modifier {
+            return modifier
+                .border(
+                    width = width.toComposeDp(density),
+                    color = color.asComposeColor(),
+                    shape = shape.asComposeShape(density),
+                )
+        }
+    }
+
     abstract fun applyModifier(modifier: Modifier, density: Density): Modifier
 }
 
@@ -115,6 +134,8 @@ object ModifierPropertySerializer : KSerializer<ModifierProperty> {
                 encoder.encodeSerializableValue(ModifierProperty.Background.serializer(), value)
             is ModifierProperty.Clip ->
                 encoder.encodeSerializableValue(ModifierProperty.Clip.serializer(), value)
+            is ModifierProperty.Border ->
+                encoder.encodeSerializableValue(ModifierProperty.Border.serializer(), value)
         }
     }
 
@@ -142,6 +163,8 @@ object ModifierPropertySerializer : KSerializer<ModifierProperty> {
                     ModifierProperty.Clip(
                         shape = ShapeSerializer.parseShapeFromYamlNode(node.get<YamlMap>("clip")!!)
                     )
+                "border" in keys ->
+                    decoder.decodeSerializableValue(ModifierProperty.Border.serializer())
                 else -> throw SerializationException(
                     "Unknown modifier at ${decoder.node}: keys=$keys"
                 )

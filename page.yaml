@@ -7,12 +7,16 @@ root:
   - clip: { type: Rounded, topLeft: 29, topRight: 30, botLeft: 30, botRight: 30 }
   - background:
     color: { r: 0, g: 0, b: 255, a: 100 }
-  - scale: { x: 1.0, y: 1.0 }
+  - scale: { x: 1., y: 1.0 }
+  - border:
+    color: { r: 0, g: 255, b: 0, a: 255 }
+    width: 2
+    shape: { type: Rounded, topLeft: 30, topRight: 30, botLeft: 30, botRight: 30 }
 #  - alpha: -1.8
   - padding: 64
+  - scale: { x: 2.0, y: 2.0 }
   child:
   - !<Text>
-    color: Re
     modifier:
     - background:
       shape: { type: Rounded, topLeft: 10, topRight: 10, botLeft: 10, botRight: 10 }
