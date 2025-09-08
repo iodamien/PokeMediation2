@@ -7,8 +7,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.Density
 import com.charleskorn.kaml.YamlInput
 import com.charleskorn.kaml.YamlMap
@@ -110,6 +113,26 @@ sealed class ModifierProperty {
         }
     }
 
+    @Serializable
+    @SerialName("drop-shadow")
+    class DropShadow(
+        val radius: DpTypeProperty = DpTypeProperty(4f),
+        val spread: DpTypeProperty = DpTypeProperty(4f),
+        val opacity: Float = 0.5f,
+        val color: ColorTypeProperty = ColorTypeProperty.Black,
+    ) : ModifierProperty() {
+        override fun applyModifier(modifier: Modifier, density: Density): Modifier = modifier
+            .dropShadow(
+                shape = RectangleShape,
+                shadow = androidx.compose.ui.graphics.shadow.Shadow(
+                    radius = radius.toComposeDp(density),
+                    color = color.asComposeColor(),
+                    spread = spread.toComposeDp(density),
+                    alpha = opacity,
+                )
+            )
+    }
+
     abstract fun applyModifier(modifier: Modifier, density: Density): Modifier
 }
 
@@ -136,6 +159,8 @@ object ModifierPropertySerializer : KSerializer<ModifierProperty> {
                 encoder.encodeSerializableValue(ModifierProperty.Clip.serializer(), value)
             is ModifierProperty.Border ->
                 encoder.encodeSerializableValue(ModifierProperty.Border.serializer(), value)
+            is ModifierProperty.DropShadow ->
+                encoder.encodeSerializableValue(ModifierProperty.DropShadow.serializer(), value)
         }
     }
 
@@ -147,6 +172,8 @@ object ModifierPropertySerializer : KSerializer<ModifierProperty> {
             val keys = map.entries.map { it.key.content }.toSet()
 
             return when {
+                "drop-shadow" in keys ->
+                    decoder.decodeSerializableValue(ModifierProperty.DropShadow.serializer())
                 "rotate" in keys ->
                     decoder.decodeSerializableValue(ModifierProperty.Rotate.serializer())
                 "scale" in keys ->

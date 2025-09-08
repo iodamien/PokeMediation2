@@ -1,17 +1,11 @@
 package com.lumeen.platform
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.material.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.window.singleWindowApplication
 import com.charleskorn.kaml.AnchorsAndAliases
 import com.charleskorn.kaml.PolymorphismStyle
@@ -34,23 +28,16 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
-import java.awt.image.BufferedImage
-import java.io.ByteArrayInputStream
 import java.io.File
 import java.nio.file.FileSystems
-import java.nio.file.Path
 import java.nio.file.StandardWatchEventKinds.ENTRY_CREATE
 import java.nio.file.StandardWatchEventKinds.ENTRY_DELETE
 import java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY
 import java.nio.file.StandardWatchEventKinds.OVERFLOW
 import java.nio.file.WatchEvent
-import java.util.Base64
-import javax.imageio.ImageIO
 import kotlin.time.Duration.Companion.seconds
 
 val module = SerializersModule {
@@ -63,6 +50,7 @@ val module = SerializersModule {
         subclass(ModifierProperty.Background::class)
         subclass(ModifierProperty.Clip::class)
         subclass(ModifierProperty.Border::class)
+        subclass(ModifierProperty.DropShadow::class)
     }
 
     polymorphic(ComposableProperty::class) {

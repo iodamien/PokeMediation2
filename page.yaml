@@ -56,15 +56,20 @@ root:
     text: "Row bottom"
     font-size: 24
   - !<Row>
+    modifier:
+      - rotate: 0
+      - drop-shadow:
+        spread: 4
+        radius: 8
+        opacity: 0.4
+        color: { r: 50, g: 50, b: 50 }
+      - padding: 4
+      - background:
+        color: { r: 0, g: 0, b: 0, a: 100 }
     vertical-alignment: Center
     horizontal-arrangement:
       space: 8
       align: Center
-    modifier:
-    - rotate: 0
-    - background:
-      color: { r: 255, g: 0, b: 255, a: 255 }
-    - padding: 16
     child:
     - !<Image>
       path: /home/irouva/Downloads/Capture.png
