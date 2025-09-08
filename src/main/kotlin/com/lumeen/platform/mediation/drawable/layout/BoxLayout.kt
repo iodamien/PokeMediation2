@@ -7,6 +7,7 @@ import androidx.compose.ui.unit.Density
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.composable.ComposableProperty
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.ModifierProperty
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.applyModifiers
+import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.type.ContentAlignmentProperty
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -15,12 +16,14 @@ import kotlinx.serialization.Serializable
 data class BoxLayout(
     override val modifier: List<ModifierProperty> = emptyList(),
     override val child: List<ComposableProperty> = emptyList(),
+    @SerialName("content-alignment") val contentAlignment: ContentAlignmentProperty = ContentAlignmentProperty.TopStart,
 ): LayoutProperty {
 
     @Composable
     override fun drawCompose(density: Density) {
         Box(
-            modifier = modifier.applyModifiers(density)
+            modifier = modifier.applyModifiers(density),
+            contentAlignment = contentAlignment.asCompose(),
         ) {
             child.forEach { it.drawCompose(density) }
         }
