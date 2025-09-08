@@ -35,8 +35,8 @@ sealed class ModifierProperty {
 
     @Serializable
     @SerialName("rotate")
-    data class Rotate(val degrees: Float) : ModifierProperty() {
-        override fun applyModifier(modifier: Modifier, density: Density): Modifier = modifier.rotate(degrees)
+    data class Rotate(val rotate: Float) : ModifierProperty() {
+        override fun applyModifier(modifier: Modifier, density: Density): Modifier = modifier.rotate(rotate)
     }
 
     @Serializable
@@ -147,7 +147,7 @@ object ModifierPropertySerializer : KSerializer<ModifierProperty> {
             val keys = map.entries.map { it.key.content }.toSet()
 
             return when {
-                "degrees" in keys ->
+                "rotate" in keys ->
                     decoder.decodeSerializableValue(ModifierProperty.Rotate.serializer())
                 "scale" in keys ->
                     decoder.decodeSerializableValue(ModifierProperty.Scale.serializer())
