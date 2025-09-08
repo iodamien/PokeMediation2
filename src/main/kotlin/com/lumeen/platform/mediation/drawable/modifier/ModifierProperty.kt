@@ -2,15 +2,9 @@ package com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.dropShadow
-import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.*
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.Density
 import com.charleskorn.kaml.YamlInput
@@ -35,6 +29,40 @@ import kotlinx.serialization.encoding.Encoder
 @Serializable(with = ModifierPropertySerializer::class)
 @SerialName("Modifier")
 sealed class ModifierProperty {
+
+    @Serializable
+    @SerialName("fill-max-width")
+    data class FillMaxWidth(
+        val fraction: Float = 1f,
+    ): ModifierProperty() {
+        override fun applyModifier(
+            modifier: Modifier,
+            density: Density
+        ): Modifier = modifier.fillMaxWidth(fraction)
+    }
+
+    @Serializable
+    @SerialName("fill-max-height")
+    data class FillMaxHeight(
+        val fraction: Float = 1f,
+    ): ModifierProperty() {
+        override fun applyModifier(
+            modifier: Modifier,
+            density: Density
+        ): Modifier = modifier.fillMaxHeight(fraction)
+    }
+
+
+    @Serializable
+    @SerialName("fill-max-size")
+    data class FillMaxSize(
+        val fraction: Float = 1f,
+    ): ModifierProperty() {
+        override fun applyModifier(
+            modifier: Modifier,
+            density: Density
+        ): Modifier = modifier.fillMaxSize(fraction)
+    }
 
     @Serializable
     @SerialName("rotate")
@@ -161,6 +189,12 @@ object ModifierPropertySerializer : KSerializer<ModifierProperty> {
                 encoder.encodeSerializableValue(ModifierProperty.Border.serializer(), value)
             is ModifierProperty.DropShadow ->
                 encoder.encodeSerializableValue(ModifierProperty.DropShadow.serializer(), value)
+            is ModifierProperty.FillMaxHeight ->
+                encoder.encodeSerializableValue(ModifierProperty.FillMaxHeight.serializer(), value)
+            is ModifierProperty.FillMaxSize ->
+                encoder.encodeSerializableValue(ModifierProperty.FillMaxSize.serializer(), value)
+            is ModifierProperty.FillMaxWidth ->
+                encoder.encodeSerializableValue(ModifierProperty.FillMaxWidth.serializer(), value)
         }
     }
 
@@ -172,6 +206,12 @@ object ModifierPropertySerializer : KSerializer<ModifierProperty> {
             val keys = map.entries.map { it.key.content }.toSet()
 
             return when {
+                "fill-max-width" in keys ->
+                    decoder.decodeSerializableValue(ModifierProperty.FillMaxWidth.serializer())
+                "fill-max-height" in keys ->
+                    decoder.decodeSerializableValue(ModifierProperty.FillMaxHeight.serializer())
+                "fill-max-size" in keys ->
+                    decoder.decodeSerializableValue(ModifierProperty.FillMaxSize.serializer())
                 "drop-shadow" in keys ->
                     decoder.decodeSerializableValue(ModifierProperty.DropShadow.serializer())
                 "rotate" in keys ->

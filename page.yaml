@@ -1,17 +1,16 @@
 pika: &pika !<Box>
-  modifier:
-    - background:
-      color: { r: 0, g: 255, b: 0, a: 100 }
-      shape: { type: Rounded, topLeft: 10, topRight: 10, botLeft: 10, botRight: 10 }
-    - padding: 16
   size: { w: 400, h: 100 }
   content-alignment: Center
   child:
     - !<Image>
+      modifier:
+      - padding: 16
+      - drop-shadow:
+        radius: 4
+        spread: 2
+        opacity: 0.5
+      - clip: { type: Rounded, topLeft: 8, topRight: 8, botLeft: 8, botRight: 8 }
       path: /home/irouva/Downloads/Capture.png
-    - !<Text>
-      text: "Box Center"
-      color: White
 
 root:
   !<Column>
