@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.Text
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,10 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.singleWindowApplication
 import com.charleskorn.kaml.AnchorsAndAliases
 import com.charleskorn.kaml.PolymorphismStyle
 import com.charleskorn.kaml.SequenceStyle
@@ -32,7 +29,6 @@ import com.charleskorn.kaml.Yaml
 import com.charleskorn.kaml.YamlConfiguration
 import com.irobax.uikit.components.buttons.IRButton
 import com.irobax.uikit.components.icon.IRFlag
-import com.irobax.uikit.components.icon.IconFlagResources
 import com.irobax.uikit.components.window.IRSingWindowApplication
 import com.lumeen.platform.com.lumeen.platform.mediation.MediationLang
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.composable.ComposableProperty
@@ -65,7 +61,6 @@ import java.nio.file.StandardWatchEventKinds.ENTRY_DELETE
 import java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY
 import java.nio.file.StandardWatchEventKinds.OVERFLOW
 import java.nio.file.WatchEvent
-import javax.print.attribute.standard.Media
 import kotlin.time.Duration.Companion.seconds
 
 val module = SerializersModule {
@@ -120,7 +115,7 @@ fun main() {
     println(decodedPage.root)
     val jsonText = File("output_fr.json").readText()
 
-    val localState = FillableState()
+    val localState = FillableState("fr")
     localState.loadJson(jsonText)
     IRSingWindowApplication {
         var page: Page by remember { mutableStateOf(decodedPage) }
@@ -175,7 +170,10 @@ fun main() {
                                     .size(32.dp)
                                     .pointerHoverIcon(PointerIcon.Hand)
                                     .alpha(if (isSelected) 1.0f else 0.5f)
-                                    .clickable { selectedLang = lang },
+                                    .clickable {
+                                        selectedLang = lang
+                                        localState.switchLang(lang.code)
+                                   },
                                 iconFlag = lang.icon
                             )
                         }

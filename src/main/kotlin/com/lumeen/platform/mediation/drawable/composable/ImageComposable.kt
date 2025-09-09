@@ -33,7 +33,7 @@ data class ImageComposable(
     @Composable
     override fun drawCompose(density: Density, layoutScope: LayoutScope) {
         val localFillableScope = LocalFillableScope.current
-        val imagePath = localFillableScope.getStringState(tag)
+        val imagePath by localFillableScope.getStringState(tag)
         // Force recomposition when imagePath changes using remember with key
         val currentPainter by remember(imagePath) {
             mutableStateOf(
@@ -60,8 +60,9 @@ data class ImageComposable(
     @Composable
     override fun editableComposable() {
         val localFillableScope = LocalFillableScope.current
-        val path = localFillableScope.getString(tag)
-        var imageSource: ImageSource? by remember {
+        val path = localFillableScope.getStringState(tag).value
+        val currentLang by localFillableScope.readLang
+        var imageSource: ImageSource? by remember(currentLang) {
             mutableStateOf(
                 ImageSource.File(
                     File(path.orEmpty())
