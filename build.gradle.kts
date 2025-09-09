@@ -20,9 +20,7 @@ dependencies {
     implementation(libs.kaml)
     implementation(compose.desktop.currentOs)
     implementation(libs.viewmodel)
-
-//    implementation("com.mohamedrejeb.richeditor:richeditor-compose:1.0.0-rc13")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
+    implementation(libs.richeditor.compose)
 }
 
 tasks.test {

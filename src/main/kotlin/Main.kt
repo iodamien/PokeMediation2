@@ -14,6 +14,7 @@ import com.charleskorn.kaml.Yaml
 import com.charleskorn.kaml.YamlConfiguration
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.composable.ComposableProperty
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.composable.ImageComposable
+import com.lumeen.platform.com.lumeen.platform.mediation.drawable.composable.RichTextComposable
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.composable.TextComposable
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.layout.BoxLayout
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.layout.LayoutProperty
@@ -56,6 +57,7 @@ val module = SerializersModule {
 
     polymorphic(ComposableProperty::class) {
         subclass(TextComposable::class)
+        subclass(RichTextComposable::class)
         subclass(ImageComposable::class)
 
         subclass(BoxLayout::class)
@@ -85,26 +87,6 @@ val yaml = Yaml(
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 @OptIn(FlowPreview::class)
 fun main() {
-
-//    val modifierProperties = listOf(
-//        ModifierProperty.Rotate(45f),
-//        ModifierProperty.Scale(ScaleProperty(1.5f, 1.5f)),
-//        ModifierProperty.Alpha(0.8f),
-//        ModifierProperty.Padding(PaddingProperty(left = 10, top = 20, right = 10, bottom = 20)),
-//        ModifierProperty.Rotate(45f),
-//    )
-//
-//    val struct = Struct(name = "ExampleStruct", modifiers = modifierProperties)
-//
-//    val yamlString = yaml.encodeToString(Struct.serializer(), struct)
-//    println("YAML Output:\n$yamlString")
-//    File("output.yaml").writeText(yamlString)
-//
-//    val decodeStruct = yaml.decodeFromString(Struct.serializer(), yamlString)
-//    println("Decoded Struct:\n$decodeStruct")
-
-
-
     val file = File(File("page.yaml").absolutePath)
     val inputYaml = file.readText()
     val decodedPage = yaml.decodeFromString(Page.serializer(), inputYaml)

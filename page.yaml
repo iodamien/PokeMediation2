@@ -90,15 +90,21 @@ root:
         color: { r: 0, g: 0, b: 0, a: 100 }
     vertical-alignment: Center
     horizontal-arrangement:
-      space: 8
+      space: 16
       align: Center
     child:
     - !<Image>
       path: /home/irouva/Downloads/Capture.png
     - !<Image>
       path: /home/irouva/Downloads/Capture.png
-    - !<Text>
-        text: "Row Center"
+    - !<RichText>
+        modifier:
+          - rotate: 12
+          - background:
+            color: Blue
+            shape: { type: Rounded, topLeft: 12, topRight: 12, botLeft: 12, botRight: 12.dp }
+          - padding: 8
+        html: "<p>Hello <p style=\"color: white; font-size: 40px;\">World</p> DEX</p>"
         color: White
         font-size: 24
     - *pika

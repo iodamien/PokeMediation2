@@ -12,6 +12,7 @@ couroutines-swing = "1.10.2"
 color-picker-compose = "1.1.2"
 opencv = "4.9.0-0"
 kaml = "0.94.0"
+richeditor-compose = "1.0.0-rc13"
 
 [libraries]
 coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
@@ -29,6 +30,7 @@ coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines
 color-picker-compose = { group = "com.github.skydoves", name = "colorpicker-compose", version.ref = "color-picker-compose" }
 opencv = { group = "org.openpnp", name = "opencv", version.ref = "opencv" }
 kaml = { group = "com.charleskorn.kaml", name = "kaml", version.ref = "kaml" }
+richeditor-compose = { group = "com.mohamedrejeb.richeditor", name = "richeditor-compose", version.ref = "richeditor-compose" }
 
 [plugins]
 
