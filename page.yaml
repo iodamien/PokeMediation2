@@ -81,13 +81,15 @@ root:
     modifier:
       - rotate: 0
       - drop-shadow:
-        spread: 4
+        spread: 3
         radius: 8
         opacity: 0.4
         color: { r: 50, g: 50, b: 50 }
       - padding: 4
       - background:
         color: { r: 0, g: 0, b: 0, a: 100 }
+        shape: { type: Rounded, topLeft: 16, topRight: 16, botLeft: 16, botRight: 16 }
+      - padding: 16
     vertical-alignment: Center
     horizontal-arrangement:
       space: 16
