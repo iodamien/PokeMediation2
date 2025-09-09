@@ -1,5 +1,6 @@
 package com.lumeen.platform
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.input.pointer.PointerIcon
+import androidx.compose.ui.input.pointer.pointerHoverIcon
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.singleWindowApplication
@@ -26,7 +31,10 @@ import com.charleskorn.kaml.SequenceStyle
 import com.charleskorn.kaml.Yaml
 import com.charleskorn.kaml.YamlConfiguration
 import com.irobax.uikit.components.buttons.IRButton
+import com.irobax.uikit.components.icon.IRFlag
+import com.irobax.uikit.components.icon.IconFlagResources
 import com.irobax.uikit.components.window.IRSingWindowApplication
+import com.lumeen.platform.com.lumeen.platform.mediation.MediationLang
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.composable.ComposableProperty
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.composable.ImageComposable
 import com.lumeen.platform.mediation.drawable.composable.RichTextComposable
@@ -57,6 +65,7 @@ import java.nio.file.StandardWatchEventKinds.ENTRY_DELETE
 import java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY
 import java.nio.file.StandardWatchEventKinds.OVERFLOW
 import java.nio.file.WatchEvent
+import javax.print.attribute.standard.Media
 import kotlin.time.Duration.Companion.seconds
 
 val module = SerializersModule {
@@ -109,12 +118,14 @@ fun main() {
     val inputYaml = file.readText()
     val decodedPage = yaml.decodeFromString(Page.serializer(), inputYaml)
     println(decodedPage.root)
-    val jsonText = File("output.json").readText()
+    val jsonText = File("output_fr.json").readText()
 
     val localState = FillableState()
     localState.loadJson(jsonText)
     IRSingWindowApplication {
         var page: Page by remember { mutableStateOf(decodedPage) }
+        var selectedLang: MediationLang by remember { mutableStateOf(MediationLang.FRENCH) }
+
         LaunchedEffect(Unit) {
             withContext(Dispatchers.IO) {
                 watchFileAsFlow(file.toPath())
@@ -147,9 +158,29 @@ fun main() {
                     page.asCompose(density)
                 }
                 Column(
-                    modifier = Modifier.fillMaxHeight().width(256.dp),
+                    modifier = Modifier
+                        .width(256.dp)
+                        .fillMaxHeight()
+                        .padding(8.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                 ) {
+
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        MediationLang.entries.forEach { lang ->
+                            val isSelected = selectedLang == lang
+                            IRFlag(
+                                modifier = Modifier
+                                    .size(32.dp)
+                                    .pointerHoverIcon(PointerIcon.Hand)
+                                    .alpha(if (isSelected) 1.0f else 0.5f)
+                                    .clickable { selectedLang = lang },
+                                iconFlag = lang.icon
+                            )
+                        }
+                    }
+
                     page.getAllFillableComposable().forEach {
                         it.editableComposable()
                     }
