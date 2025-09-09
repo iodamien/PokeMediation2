@@ -113,7 +113,7 @@ fun main() {
     val inputYaml = file.readText()
     val decodedPage = yaml.decodeFromString(Page.serializer(), inputYaml)
     println(decodedPage.root)
-    val jsonText = File("output_fr.json").readText()
+    val jsonText = File("output.json").readText()
 
     val localState = FillableState("fr")
     localState.loadJson(jsonText)
