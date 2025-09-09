@@ -15,17 +15,18 @@ import kotlinx.serialization.Serializable
 @Serializable
 @SerialName("Text")
 data class TextComposable(
-    val text: String,
+    override val tag: String = TagGenerator.generateTag(TextComposable::class),
+    @SerialName("text") override val value: String = "",
     val color: ColorTypeProperty = ColorTypeProperty.Unspecified,
     @SerialName("font-size") val fontSize: SpTypeProperty = SpTypeProperty(14f, SpUnit.Sp),
     override val modifier: List<ModifierProperty> = emptyList(),
-): ComposableProperty {
+): ComposableProperty, FillableProperty<String> {
 
     @Composable
     override fun drawCompose(density: Density, layoutScope: LayoutScope) {
         Text(
             modifier = modifier.applyModifiers(density, layoutScope),
-            text = text,
+            text = value,
             color = color.asComposeColor(),
             fontSize = fontSize.toCompose(density),
         )

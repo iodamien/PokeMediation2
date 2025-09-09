@@ -40,6 +40,7 @@ root:
         color: Black
     child:
       - !<Text>
+        tag: "Test0"
         text: "Hello World!"
         color: White
       - !<Box>
@@ -68,6 +69,7 @@ root:
       shape: { type: Rounded, topLeft: 10, topRight: 10, botLeft: 10, botRight: 10 }
       color: Red
     - padding: 32
+    tag: "Test"
     text: "Hello World!"
   - !<Text>
     modifier:
@@ -75,6 +77,7 @@ root:
         shape: { type: Rounded, topLeft: 10, topRight: 10, botLeft: 10, botRight: 10 }
         color: Red
       - padding: 32
+    tag: "Test3"
     text: "Row bottom"
     font-size: 24
   - !<Row>
@@ -99,6 +102,10 @@ root:
 #      path: /home/irouva/Downloads/Capture.png
 #    - !<Image>
 #      path: /home/irouva/Downloads/Capture.png
+    - !<Text>
+      text: "Hello Title!!!!"
+      color: White
+      font-size: 40
     - !<RichText>
         modifier:
           - size: { w: 400 }
