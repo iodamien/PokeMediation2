@@ -19,7 +19,7 @@ data class SpTypeProperty(
     val unit: SpUnit = SpUnit.Sp,
 ) {
 
-    fun toComposeSp(density: Density): TextUnit {
+    fun toCompose(density: Density): TextUnit {
         return when (unit) {
             SpUnit.Sp -> value.sp
             SpUnit.Px -> (value / density.density).sp

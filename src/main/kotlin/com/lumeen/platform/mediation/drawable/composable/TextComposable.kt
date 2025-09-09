@@ -27,7 +27,7 @@ data class TextComposable(
             modifier = modifier.applyModifiers(density, layoutScope),
             text = text,
             color = color.asComposeColor(),
-            fontSize = fontSize.toComposeSp(density),
+            fontSize = fontSize.toCompose(density),
         )
     }
 }

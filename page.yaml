@@ -95,18 +95,20 @@ root:
       space: 16
       align: Center
     child:
-    - !<Image>
-      path: /home/irouva/Downloads/Capture.png
-    - !<Image>
-      path: /home/irouva/Downloads/Capture.png
+#    - !<Image>
+#      path: /home/irouva/Downloads/Capture.png
+#    - !<Image>
+#      path: /home/irouva/Downloads/Capture.png
     - !<RichText>
         modifier:
-          - rotate: 12
+          - size: { w: 400 }
+          - rotate: 0
           - background:
             color: Blue
             shape: { type: Rounded, topLeft: 12, topRight: 12, botLeft: 12, botRight: 12.dp }
-          - padding: 8
+        text-align: Center
         html: "<p style=\"color: red; font-size: 30px;\">Rich text <p style=\"color: white; font-size: 40px;\">World</p> DEX</p>"
         color: White
         font-size: 24
+        line-height: 10
     - *pika

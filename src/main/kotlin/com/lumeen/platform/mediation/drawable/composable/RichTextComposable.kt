@@ -6,6 +6,7 @@ import androidx.compose.ui.unit.Density
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.layout.LayoutScope
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.ModifierProperty
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.applyModifiers
+import com.lumeen.platform.com.lumeen.platform.mediation.drawable.type.SpTypeProperty
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.type.TextAlignProperty
 import com.mohamedrejeb.richeditor.model.rememberRichTextState
 import com.mohamedrejeb.richeditor.ui.material3.RichText
@@ -19,6 +20,8 @@ data class RichTextComposable(
     override val modifier: List<ModifierProperty> = emptyList(),
     @SerialName("max-lines") val maxLines: Int = Int.MAX_VALUE,
     @SerialName("text-align") val textAlign: TextAlignProperty = TextAlignProperty.Start,
+    @SerialName("line-height") val lineHeight: SpTypeProperty = SpTypeProperty.Unspecified,
+    @SerialName("soft-wrap") val softWrap: Boolean = true,
 ): ComposableProperty {
 
     @Composable
@@ -36,6 +39,8 @@ data class RichTextComposable(
             state = richTextState,
             maxLines = maxLines,
             textAlign = textAlign.asCompose(),
+            lineHeight = lineHeight.toCompose(density),
+            softWrap = softWrap,
         )
     }
 }
