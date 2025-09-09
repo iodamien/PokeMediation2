@@ -33,8 +33,9 @@ data class ImageComposable(
     @Composable
     override fun drawCompose(density: Density, layoutScope: LayoutScope) {
         val localFillableScope = LocalFillableScope.current
-        val imagePath = localFillableScope.getString(tag)
+        val imagePath by localFillableScope.getStringState(tag)
         var currentPainter: Painter? by remember { mutableStateOf(null) }
+        println("imagePath: $imagePath")
 
         LaunchedEffect(imagePath) {
             currentPainter = if (imagePath != null) {
@@ -68,7 +69,6 @@ data class ImageComposable(
                 .size(256.dp),
             imageSource = imageSource,
             onImagePicked = { files ->
-                println("Picked files: $files")
                 val firstFile = files.getOrNull(0)
                 if (firstFile != null) {
                     localFillableScope.updateState(tag, firstFile.file.absolutePath)

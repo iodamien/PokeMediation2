@@ -129,9 +129,11 @@ fun main() {
             }
         }
 
+        val jsonText = File("output.json").readText()
         val density = LocalDensity.current
-        var export: String by remember { mutableStateOf("") }
+        var export: String by remember { mutableStateOf(jsonText) }
         val localState = FillableState()
+        localState.loadJson(jsonText)
         Row(
             modifier = Modifier.padding(16.dp),
         ) {
@@ -154,6 +156,7 @@ fun main() {
                         text = "Export"
                     ) {
                         export = localState.exportAsJson()
+                        File("output.json").writeText(export)
                     }
 
                     Text(text = export)

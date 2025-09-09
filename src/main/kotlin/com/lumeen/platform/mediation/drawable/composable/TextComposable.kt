@@ -36,7 +36,7 @@ data class TextComposable(
     @Composable
     override fun drawCompose(density: Density, layoutScope: LayoutScope) {
         val localFillableScope = LocalFillableScope.current
-        val textValue = localFillableScope.getString(tag)
+        val textValue by localFillableScope.getStringState(tag)
         Text(
             modifier = modifier.applyModifiers(density, layoutScope),
             text = textValue ?: placeholder,
@@ -48,7 +48,7 @@ data class TextComposable(
     @Composable
     override fun editableComposable() {
         val localFillableScope = LocalFillableScope.current
-        var textFieldValue by remember { mutableStateOf(TextFieldValue()) }
+        var textFieldValue by remember { mutableStateOf(TextFieldValue(localFillableScope.getString(tag).orEmpty())) }
         IRTextField(
             modifier = Modifier.fillMaxWidth(),
             value = textFieldValue,
