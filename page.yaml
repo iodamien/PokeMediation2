@@ -104,7 +104,7 @@ root:
             color: Blue
             shape: { type: Rounded, topLeft: 12, topRight: 12, botLeft: 12, botRight: 12.dp }
           - padding: 8
-        html: "<p>Hello <p style=\"color: white; font-size: 40px;\">World</p> DEX</p>"
+        html: "<p style=\"color: red; font-size: 30px;\">Rich text <p style=\"color: white; font-size: 40px;\">World</p> DEX</p>"
         color: White
         font-size: 24
     - *pika
