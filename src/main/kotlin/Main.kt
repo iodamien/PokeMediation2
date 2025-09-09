@@ -109,6 +109,10 @@ fun main() {
     val inputYaml = file.readText()
     val decodedPage = yaml.decodeFromString(Page.serializer(), inputYaml)
     println(decodedPage.root)
+    val jsonText = File("output.json").readText()
+
+    val localState = FillableState()
+    localState.loadJson(jsonText)
     IRSingWindowApplication {
         var page: Page by remember { mutableStateOf(decodedPage) }
         LaunchedEffect(Unit) {
@@ -129,11 +133,9 @@ fun main() {
             }
         }
 
-        val jsonText = File("output.json").readText()
         val density = LocalDensity.current
         var export: String by remember { mutableStateOf(jsonText) }
-        val localState = FillableState()
-        localState.loadJson(jsonText)
+
         Row(
             modifier = Modifier.padding(16.dp),
         ) {

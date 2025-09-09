@@ -36,7 +36,7 @@ data class TextComposable(
     @Composable
     override fun drawCompose(density: Density, layoutScope: LayoutScope) {
         val localFillableScope = LocalFillableScope.current
-        val textValue by localFillableScope.getStringState(tag)
+        val textValue = localFillableScope.getString(tag)
         Text(
             modifier = modifier.applyModifiers(density, layoutScope),
             text = textValue ?: placeholder,

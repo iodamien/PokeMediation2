@@ -28,23 +28,24 @@ import javax.imageio.ImageIO
 data class ImageComposable(
     override val tag: String,
     override val modifier: List<ModifierProperty> = emptyList(),
-): ComposableProperty, FillableProperty {
+) : ComposableProperty, FillableProperty {
 
     @Composable
     override fun drawCompose(density: Density, layoutScope: LayoutScope) {
         val localFillableScope = LocalFillableScope.current
-        val imagePath by localFillableScope.getStringState(tag)
-        var currentPainter: Painter? by remember { mutableStateOf(null) }
-        println("imagePath: $imagePath")
-
-        LaunchedEffect(imagePath) {
-            currentPainter = if (imagePath != null) {
-                runCatching {
-                    ImageIO.read(File(imagePath))
-                }.getOrNull()?.toPainter()
-            } else {
-                null
-            }
+        val imagePath = localFillableScope.getStringState(tag)
+        // Force recomposition when imagePath changes using remember with key
+        val currentPainter by remember(imagePath) {
+            mutableStateOf(
+                if (!imagePath.isNullOrEmpty() && File(imagePath).exists()) {
+                    try {
+                        ImageIO.read(File(imagePath))?.toPainter()
+                    } catch (e: Exception) {
+                        println("Error loading image: ${e.message}")
+                        null
+                    }
+                } else null
+            )
         }
 
         currentPainter?.also { painter ->
@@ -60,9 +61,12 @@ data class ImageComposable(
     override fun editableComposable() {
         val localFillableScope = LocalFillableScope.current
         val path = localFillableScope.getString(tag)
-        var imageSource: ImageSource? by remember { mutableStateOf(ImageSource.File(
-            File(path.orEmpty())
-        ).takeIf { File(path.orEmpty()).exists() }) }
+        var imageSource: ImageSource? by remember {
+            mutableStateOf(
+                ImageSource.File(
+                    File(path.orEmpty())
+                ).takeIf { File(path.orEmpty()).exists() })
+        }
 
         IRImagePicker(
             modifier = Modifier
@@ -78,7 +82,7 @@ data class ImageComposable(
             onDeleteClick = {
                 println("Delete image")
                 imageSource = null
-                localFillableScope.updateState(tag, null)
+                localFillableScope.removeState(tag)
             }
         )
     }
