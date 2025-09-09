@@ -1,10 +1,14 @@
 pika: &pika !<Box>
   content-alignment: Center
+  modifier:
+    - size: { w: 128, h: 128 }
+    - background: Green
   child:
     - !<Image>
-      tag: img1
+      tag: img5
       modifier:
       - size: { w: 128, h: 128 }
+      - background: Red
 
 root:
   !<Column>
@@ -14,6 +18,11 @@ root:
       color: { r: 55, g: 55, b: 55, a: 100 }
   horizontal-alignment: Center
   child:
-  - *pika
-  - !<Text>
-    tag: Title
+    - !<Image>
+      tag: img1
+      modifier:
+        - size: { w: 128, h: 128 }
+        - background: Red
+    - !<Text>
+      tag: Title
+    - *pika

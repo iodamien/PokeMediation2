@@ -5,6 +5,9 @@ import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.runtime.staticCompositionLocalOf
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonNull
+import kotlinx.serialization.json.JsonPrimitive
 
 class FillableState {
 
@@ -37,6 +40,26 @@ class FillableState {
 
     fun getBoolean(tag: String): Boolean? {
         return state[tag] as? Boolean
+    }
+
+    fun exportAsJson(): String {
+        val jsonMap = state.mapValues { (_, value) ->
+            when (value) {
+                null -> JsonNull
+                is String -> JsonPrimitive(value)
+                is Int -> JsonPrimitive(value)
+                is Long -> JsonPrimitive(value)
+                is Float -> JsonPrimitive(value)
+                is Double -> JsonPrimitive(value)
+                is Boolean -> JsonPrimitive(value)
+                else -> JsonPrimitive(value.toString())
+            }
+        }
+
+        return Json.encodeToString(
+            kotlinx.serialization.json.JsonObject.serializer(),
+            kotlinx.serialization.json.JsonObject(jsonMap)
+        )
     }
 }
 

@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Text
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,6 +25,7 @@ import com.charleskorn.kaml.PolymorphismStyle
 import com.charleskorn.kaml.SequenceStyle
 import com.charleskorn.kaml.Yaml
 import com.charleskorn.kaml.YamlConfiguration
+import com.irobax.uikit.components.buttons.IRButton
 import com.irobax.uikit.components.window.IRSingWindowApplication
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.composable.ComposableProperty
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.composable.ImageComposable
@@ -35,6 +38,8 @@ import com.lumeen.platform.com.lumeen.platform.mediation.drawable.layout.RowLayo
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.mediation.Page
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.mediation.getAllFillableComposable
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.ModifierProperty
+import com.lumeen.platform.mediation.drawable.composable.FillableState
+import com.lumeen.platform.mediation.drawable.composable.LocalFillableScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.awaitClose
@@ -125,21 +130,33 @@ fun main() {
         }
 
         val density = LocalDensity.current
+        var export: String by remember { mutableStateOf("") }
+        val localState = FillableState()
         Row(
             modifier = Modifier.padding(16.dp),
         ) {
-            Box(
-                modifier = Modifier.weight(1f)
-                    .fillMaxHeight()
-            ) {
-                page.asCompose(density)
-            }
-            Column(
-                modifier = Modifier.fillMaxHeight().width(256.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-            ) {
-                page.getAllFillableComposable().forEach {
-                    it.editableComposable()
+            CompositionLocalProvider(LocalFillableScope provides localState) {
+                Box(
+                    modifier = Modifier.weight(1f)
+                        .fillMaxHeight()
+                ) {
+                    page.asCompose(density)
+                }
+                Column(
+                    modifier = Modifier.fillMaxHeight().width(256.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                ) {
+                    page.getAllFillableComposable().forEach {
+                        it.editableComposable()
+                    }
+
+                    IRButton(
+                        text = "Export"
+                    ) {
+                        export = localState.exportAsJson()
+                    }
+
+                    Text(text = export)
                 }
             }
         }
