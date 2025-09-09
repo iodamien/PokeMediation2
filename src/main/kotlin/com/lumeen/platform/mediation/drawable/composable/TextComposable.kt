@@ -1,5 +1,6 @@
 package com.lumeen.platform.mediation.drawable.composable
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
@@ -8,8 +9,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.Density
+import com.irobax.uikit.components.textfield.IRTextField
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.composable.ComposableProperty
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.layout.LayoutScope
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.ModifierProperty
@@ -23,7 +26,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 @SerialName("Text")
 data class TextComposable(
-    override val tag: String = TagGenerator.generateTag(TextComposable::class),
+    override val tag: String,
     val placeholder: String = "",
     val color: ColorTypeProperty = ColorTypeProperty.Unspecified,
     @SerialName("font-size") val fontSize: SpTypeProperty = SpTypeProperty(14f, SpUnit.Sp),
@@ -46,7 +49,8 @@ data class TextComposable(
     override fun editableComposable() {
         val localFillableScope = LocalFillableScope.current
         var textFieldValue by remember { mutableStateOf(TextFieldValue()) }
-        TextField(
+        IRTextField(
+            modifier = Modifier.fillMaxWidth(),
             value = textFieldValue,
             onValueChange = { newTextFieldValue ->
                 textFieldValue = newTextFieldValue

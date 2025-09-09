@@ -1,9 +1,12 @@
 package com.lumeen.platform
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Text
 import androidx.compose.runtime.LaunchedEffect
@@ -20,6 +23,7 @@ import com.charleskorn.kaml.PolymorphismStyle
 import com.charleskorn.kaml.SequenceStyle
 import com.charleskorn.kaml.Yaml
 import com.charleskorn.kaml.YamlConfiguration
+import com.irobax.uikit.components.window.IRSingWindowApplication
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.composable.ComposableProperty
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.composable.ImageComposable
 import com.lumeen.platform.mediation.drawable.composable.RichTextComposable
@@ -100,7 +104,7 @@ fun main() {
     val inputYaml = file.readText()
     val decodedPage = yaml.decodeFromString(Page.serializer(), inputYaml)
     println(decodedPage.root)
-    singleWindowApplication {
+    IRSingWindowApplication {
         var page: Page by remember { mutableStateOf(decodedPage) }
         LaunchedEffect(Unit) {
             withContext(Dispatchers.IO) {
@@ -121,7 +125,9 @@ fun main() {
         }
 
         val density = LocalDensity.current
-        Row {
+        Row(
+            modifier = Modifier.padding(16.dp),
+        ) {
             Box(
                 modifier = Modifier.weight(1f)
                     .fillMaxHeight()
@@ -129,7 +135,8 @@ fun main() {
                 page.asCompose(density)
             }
             Column(
-                modifier = Modifier.fillMaxHeight().width(200.dp)
+                modifier = Modifier.fillMaxHeight().width(256.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 page.getAllFillableComposable().forEach {
                     it.editableComposable()

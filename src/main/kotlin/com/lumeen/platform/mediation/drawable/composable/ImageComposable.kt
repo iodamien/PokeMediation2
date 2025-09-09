@@ -1,142 +1,85 @@
 package com.lumeen.platform.com.lumeen.platform.mediation.drawable.composable
 
 import androidx.compose.foundation.Image
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.toPainter
 import androidx.compose.ui.unit.Density
-import com.charleskorn.kaml.YamlList
-import com.charleskorn.kaml.YamlMap
-import com.charleskorn.kaml.YamlNode
-import com.charleskorn.kaml.YamlScalar
+import androidx.compose.ui.unit.dp
+import com.irobax.uikit.components.image.IRImagePicker
+import com.irobax.uikit.components.image.ImageSource
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.layout.LayoutScope
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.ModifierProperty
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.applyModifiers
-import com.lumeen.platform.yaml
-import kotlinx.serialization.InternalSerializationApi
-import kotlinx.serialization.KSerializer
+import com.lumeen.platform.mediation.drawable.composable.FillableProperty
+import com.lumeen.platform.mediation.drawable.composable.LocalFillableScope
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.SerializationException
-import kotlinx.serialization.builtins.ListSerializer
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.descriptors.SerialKind
-import kotlinx.serialization.descriptors.buildSerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
-import java.awt.image.BufferedImage
-import java.io.ByteArrayInputStream
 import java.io.File
-import java.util.Base64
 import javax.imageio.ImageIO
-import kotlin.collections.emptyList
 
-@Serializable(with = ImageSerializer::class)
+@Serializable
 @SerialName("Image")
 data class ImageComposable(
-    val painter: Painter,
+    override val tag: String,
     override val modifier: List<ModifierProperty> = emptyList(),
-): ComposableProperty {
+): ComposableProperty, FillableProperty {
 
     @Composable
     override fun drawCompose(density: Density, layoutScope: LayoutScope) {
-        Image(
-            modifier = modifier.applyModifiers(density, layoutScope),
-            contentDescription = null,
-            painter = painter,
-        )
-    }
-}
+        val localFillableScope = LocalFillableScope.current
+        val imagePath = localFillableScope.getString(tag)
+        var currentPainter: Painter? by remember { mutableStateOf(null) }
 
-class ImageSerializer: KSerializer<ImageComposable> {
-    @OptIn(InternalSerializationApi::class)
-    override val descriptor: SerialDescriptor = buildSerialDescriptor("Image", SerialKind.CONTEXTUAL)
-
-    override fun serialize(
-        encoder: Encoder,
-        value: ImageComposable
-    ) {
-
-    }
-
-    override fun deserialize(decoder: Decoder): ImageComposable {
-        if (decoder is com.charleskorn.kaml.YamlInput) {
-            val node = decoder.node
-            if (node is YamlMap) {
-                fun getString(key: String, default: String) =
-                    node.get<YamlScalar>(key)?.content ?: default
-
-                val path = getString("path", "")
-                val base64 = getString("base64", "")
-                val modifier = node.get<YamlNode>("modifier")?.let { modifierNode ->
-                    when (modifierNode) {
-                        is YamlList -> {
-                            // Already a list
-                            yaml.decodeFromYamlNode(
-                                ListSerializer(ModifierProperty.serializer()),
-                                modifierNode
-                            )
-                        }
-                        is YamlMap -> {
-                            // Single modifier - wrap in list
-                            listOf(
-                                yaml.decodeFromYamlNode(
-                                    ModifierProperty.serializer(),
-                                    modifierNode
-                                )
-                            )
-                        }
-                        else -> emptyList()
-                    }
-                } ?: emptyList()
-
-                val painter = when {
-                    base64.isNotEmpty() -> {
-                        val img = base64ToBufferedImage(base64)
-                            ?: throw SerializationException("Failed to decode Base64 image")
-                        img.toPainter()
-                    }
-                    path.isNotEmpty() -> {
-                        val imgFile = File(path)
-                        if (imgFile.exists()) {
-                            ImageIO.read(imgFile).toPainter()
-                        } else {
-                            throw SerializationException("Image file not found at path: $path")
-                        }
-                    }
-                    else -> throw SerializationException("Image must have either 'path' or 'resource' defined")
-                }
-
-                return ImageComposable(
-                    modifier = modifier,
-                    painter = painter,
-                )
+        LaunchedEffect(imagePath) {
+            currentPainter = if (imagePath != null) {
+                runCatching {
+                    ImageIO.read(File(imagePath))
+                }.getOrNull()?.toPainter()
+            } else {
+                null
             }
         }
 
-        throw SerializationException("ImageComposable cannot be deserialized directly")
+        currentPainter?.also { painter ->
+            Image(
+                modifier = modifier.applyModifiers(density, layoutScope),
+                contentDescription = null,
+                painter = painter,
+            )
+        } ?: Box(modifier = modifier.applyModifiers(density, layoutScope))
     }
-}
 
-fun base64ToBufferedImage(base64String: String): BufferedImage? {
-    return try {
-        // Remove data URL prefix if present (e.g., "data:image/png;base64,")
-        val base64Data = if (base64String.contains(",")) {
-            base64String.substringAfter(",")
-        } else {
-            base64String
-        }
+    @Composable
+    override fun editableComposable() {
+        val localFillableScope = LocalFillableScope.current
+        val path = localFillableScope.getString(tag)
+        var imageSource: ImageSource? by remember { mutableStateOf(ImageSource.File(
+            File(path.orEmpty())
+        ).takeIf { File(path.orEmpty()).exists() }) }
 
-        // Decode Base64 string to byte array
-        val imageBytes = Base64.getDecoder().decode(base64Data)
-
-        // Create ByteArrayInputStream from byte array
-        val inputStream = ByteArrayInputStream(imageBytes)
-
-        // Read the image from the input stream
-        ImageIO.read(inputStream)
-    } catch (e: Exception) {
-        println("Error converting Base64 to BufferedImage: ${e.message}")
-        null
+        IRImagePicker(
+            modifier = Modifier
+                .size(256.dp),
+            imageSource = imageSource,
+            onImagePicked = { files ->
+                println("Picked files: $files")
+                val firstFile = files.getOrNull(0)
+                if (firstFile != null) {
+                    localFillableScope.updateState(tag, firstFile.file.absolutePath)
+                    imageSource = ImageSource.File(firstFile.file)
+                }
+            },
+            onDeleteClick = {
+                println("Delete image")
+                imageSource = null
+                localFillableScope.updateState(tag, null)
+            }
+        )
     }
 }

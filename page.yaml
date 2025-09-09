@@ -1,121 +1,19 @@
 pika: &pika !<Box>
-  size: { w: 400, h: 100 }
   content-alignment: Center
   child:
     - !<Image>
+      tag: img1
       modifier:
-      - padding: 16
-      - drop-shadow:
-        radius: 4
-        spread: 2
-        opacity: 0.5
-      - clip: { type: Rounded, topLeft: 8, topRight: 8, botLeft: 8, botRight: 8 }
-      path: /home/irouva/Downloads/Capture.png
+      - size: { w: 128, h: 128 }
 
 root:
   !<Column>
-  horizontal-alignment: Center
-  vertical-arrangement:
-    space: 8
-    align: Center
   modifier:
-  - size: { w: 1280, h: 720 }
-  - rotate: 0
-  - padding: 32
-  - clip: { type: Rounded, topLeft: 29, topRight: 30, botLeft: 30, botRight: 30 }
-  - background:
-    color: { r: 0, g: 0, b: 255, a: 100 }
-  - border:
-    color: { r: 0, g: 255, b: 0, a: 255 }
-    width: 2
-    shape: { type: Rounded, topLeft: 30, topRight: 30, botLeft: 30, botRight: 30 }
-#  - alpha: -1.8
-  - padding: 16
-  child:
-  - !<Row>
-    modifier:
-      - fill-max-width: 1
-      - size: { h: 80 }
-      - background:
-        color: Black
-    child:
-      - !<Text>
-        tag: "Test0"
-        placeholder: "Hello World!"
-        color: White
-      - !<Box>
-        modifier:
-          - size: { h: 80 }
-          - weight: 1
-          - background:
-            color: Green
-      - !<Box>
-        modifier:
-          - size: { h: 80 }
-          - weight: 4
-          - background:
-            color: Blue
-
-  - !<Image>
-    modifier:
-      - background:
-        color: { r: 255, g: 0, b: 0, a: 100 }
-        shape: { type: Rounded, topLeft: 10, topRight: 10, botLeft: 10, botRight: 10 }
-      - scale: { x: 0.5, y: 0.5 }
-    path: /home/irouva/Downloads/Capture.png
-  - !<Text>
-    modifier:
+    - fill-max-size: 1
     - background:
-      shape: { type: Rounded, topLeft: 10, topRight: 10, botLeft: 10, botRight: 10 }
-      color: Red
-    - padding: 32
-    tag: "Test"
-    placeholder: "Hello World!"
+      color: { r: 55, g: 55, b: 55, a: 100 }
+  horizontal-alignment: Center
+  child:
+  - *pika
   - !<Text>
-    modifier:
-      - background:
-        shape: { type: Rounded, topLeft: 10, topRight: 10, botLeft: 10, botRight: 10 }
-        color: Red
-      - padding: 32
-    tag: "Test3"
-    placeholder: "Row bottom"
-    font-size: 24
-  - !<Row>
-    modifier:
-      - rotate: 0
-      - drop-shadow:
-        spread: 3
-        radius: 8
-        opacity: 0.4
-        color: { r: 50, g: 50, b: 50 }
-      - padding: 4
-      - background:
-        color: { r: 0, g: 0, b: 0, a: 100 }
-        shape: { type: Rounded, topLeft: 16, topRight: 16, botLeft: 16, botRight: 16 }
-      - padding: 16
-    vertical-alignment: Center
-    horizontal-arrangement:
-      space: 16
-      align: Center
-    child:
-#    - !<Image>
-#      path: /home/irouva/Downloads/Capture.png
-#    - !<Image>
-#      path: /home/irouva/Downloads/Capture.png
-    - !<Text>
-      placeholder: "Hello Title!!!!"
-      color: White
-      font-size: 40
-    - !<RichText>
-        modifier:
-          - size: { w: 400 }
-          - rotate: 0
-          - background:
-            color: Blue
-            shape: { type: Rounded, topLeft: 12, topRight: 12, botLeft: 12, botRight: 12.dp }
-        text-align: Center
-        html: "<p style=\"color: red; font-size: 30px;\">Rich text <p style=\"color: white; font-size: 40px;\">World</p> DEX</p>"
-        color: White
-        font-size: 24
-        line-height: 10
-    - *pika
+    tag: Title

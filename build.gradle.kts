@@ -13,6 +13,13 @@ repositories {
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     google()
     maven { url = uri("https://jitpack.io") }
+    maven {
+        url = uri("https://maven.pkg.github.com/iodamien/irobax-client")
+        credentials {
+            username = "iodamien"
+            password = "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"
+        }
+    }
 }
 
 dependencies {
@@ -21,6 +28,9 @@ dependencies {
     implementation(compose.desktop.currentOs)
     implementation(libs.viewmodel)
     implementation(libs.richeditor.compose)
+
+    implementation("com.irobax.uikit:uikit:1.3-SNAPSHOT")
+    implementation("com.irobax.record:record:1.0-SNAPSHOT")
 }
 
 tasks.test {

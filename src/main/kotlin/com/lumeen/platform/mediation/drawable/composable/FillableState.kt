@@ -8,10 +8,11 @@ import androidx.compose.runtime.staticCompositionLocalOf
 
 class FillableState {
 
-    private val state: SnapshotStateMap<String, Any> = mutableStateMapOf()
+    private val state: SnapshotStateMap<String, Any?> = mutableStateMapOf()
 
-    fun updateState(tag: String, value: Any) {
+    fun updateState(tag: String, value: Any?) {
         state[tag] = value
+        println(state)
     }
 
     fun getString(tag: String): String? {
