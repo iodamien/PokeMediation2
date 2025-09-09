@@ -1,23 +1,11 @@
-package com.lumeen.platform.com.lumeen.platform.mediation.drawable.composable
+package com.lumeen.platform.mediation.drawable.composable
 
-import kotlin.reflect.KClass
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 
-interface FillableProperty<T> {
+interface FillableProperty {
     val tag: String
-    val value: T
-}
 
-object TagGenerator {
-    private val tagCount: MutableMap<KClass<out FillableProperty<*>>, Long> = mutableMapOf()
-
-    fun generateTag(kClass: KClass<out FillableProperty<*>>): String {
-        val currentCount = tagCount[kClass] ?: 0L
-        tagCount[kClass] = currentCount + 1
-        val className = kClass.simpleName
-        return "${className}_$currentCount"
-    }
-
-    fun reset() {
-        tagCount.clear()
-    }
+    @Composable
+    fun editableComposable()
 }

@@ -1,11 +1,19 @@
 package com.lumeen.platform
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.singleWindowApplication
 import com.charleskorn.kaml.AnchorsAndAliases
 import com.charleskorn.kaml.PolymorphismStyle
@@ -14,13 +22,14 @@ import com.charleskorn.kaml.Yaml
 import com.charleskorn.kaml.YamlConfiguration
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.composable.ComposableProperty
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.composable.ImageComposable
-import com.lumeen.platform.com.lumeen.platform.mediation.drawable.composable.RichTextComposable
-import com.lumeen.platform.com.lumeen.platform.mediation.drawable.composable.TextComposable
+import com.lumeen.platform.mediation.drawable.composable.RichTextComposable
+import com.lumeen.platform.mediation.drawable.composable.TextComposable
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.layout.BoxLayout
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.layout.LayoutProperty
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.layout.ColumnLayout
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.layout.RowLayout
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.mediation.Page
+import com.lumeen.platform.com.lumeen.platform.mediation.drawable.mediation.getAllFillableComposable
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.ModifierProperty
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
@@ -112,7 +121,21 @@ fun main() {
         }
 
         val density = LocalDensity.current
-        page.asCompose(density)
+        Row {
+            Box(
+                modifier = Modifier.weight(1f)
+                    .fillMaxHeight()
+            ) {
+                page.asCompose(density)
+            }
+            Column(
+                modifier = Modifier.fillMaxHeight().width(200.dp)
+            ) {
+                page.getAllFillableComposable().forEach {
+                    it.editableComposable()
+                }
+            }
+        }
     }
 }
 
@@ -123,7 +146,6 @@ fun watchFileAsFlow(file: java.nio.file.Path): Flow<java.nio.file.Path> = callba
 
     val thread = Thread {
         try {
-            println("HELLO 0")
             while (!Thread.currentThread().isInterrupted) {
                 val wk = watcher.take()
                 for (event in wk.pollEvents()) {

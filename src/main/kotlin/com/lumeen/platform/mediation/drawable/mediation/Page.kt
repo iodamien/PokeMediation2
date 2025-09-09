@@ -5,6 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.Density
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.layout.LayoutProperty
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.layout.asLayoutScope
+import com.lumeen.platform.com.lumeen.platform.mediation.drawable.layout.getFillableComposable
+import com.lumeen.platform.mediation.drawable.composable.FillableProperty
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -18,3 +20,5 @@ data class Page(
         }
     }
 }
+
+fun Page.getAllFillableComposable(): List<FillableProperty> = root.getFillableComposable()

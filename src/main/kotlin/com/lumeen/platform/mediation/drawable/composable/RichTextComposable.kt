@@ -1,8 +1,9 @@
-package com.lumeen.platform.com.lumeen.platform.mediation.drawable.composable
+package com.lumeen.platform.mediation.drawable.composable
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.unit.Density
+import com.lumeen.platform.com.lumeen.platform.mediation.drawable.composable.ComposableProperty
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.layout.LayoutScope
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.ModifierProperty
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.applyModifiers

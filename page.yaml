@@ -41,7 +41,7 @@ root:
     child:
       - !<Text>
         tag: "Test0"
-        text: "Hello World!"
+        placeholder: "Hello World!"
         color: White
       - !<Box>
         modifier:
@@ -70,7 +70,7 @@ root:
       color: Red
     - padding: 32
     tag: "Test"
-    text: "Hello World!"
+    placeholder: "Hello World!"
   - !<Text>
     modifier:
       - background:
@@ -78,7 +78,7 @@ root:
         color: Red
       - padding: 32
     tag: "Test3"
-    text: "Row bottom"
+    placeholder: "Row bottom"
     font-size: 24
   - !<Row>
     modifier:
@@ -103,7 +103,7 @@ root:
 #    - !<Image>
 #      path: /home/irouva/Downloads/Capture.png
     - !<Text>
-      text: "Hello Title!!!!"
+      placeholder: "Hello Title!!!!"
       color: White
       font-size: 40
     - !<RichText>
