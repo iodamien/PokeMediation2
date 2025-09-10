@@ -154,7 +154,7 @@ fun main() {
                 }
                 Column(
                     modifier = Modifier
-                        .width(256.dp)
+                        .width(300.dp)
                         .fillMaxHeight()
                         .padding(8.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp),

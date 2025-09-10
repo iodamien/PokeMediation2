@@ -29,7 +29,8 @@ dependencies {
     implementation(libs.viewmodel)
     implementation(libs.richeditor.compose)
 
-    implementation("com.irobax.uikit:uikit:1.3-SNAPSHOT")
+    implementation("com.irobax.toolkit:toolkit:1.0-SNAPSHOT")
+    implementation("com.irobax.uikit:uikit:1.5-SNAPSHOT")
     implementation("com.irobax.record:record:1.0-SNAPSHOT")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")

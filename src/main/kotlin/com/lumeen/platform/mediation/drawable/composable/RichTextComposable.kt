@@ -2,6 +2,10 @@ package com.lumeen.platform.mediation.drawable.composable
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -15,6 +19,7 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import com.irobax.uikit.components.icon.IRClickableIconSquare
 import com.irobax.uikit.components.icon.IconResources
+import com.irobax.uikit.components.textfield.IRRichTextEditor
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.composable.ComposableProperty
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.layout.LayoutScope
 import com.lumeen.platform.com.lumeen.platform.mediation.drawable.modifier.ModifierProperty
@@ -77,13 +82,19 @@ data class RichTextComposable(
                 localFillableState.updateState(tag, richTextState.toHtml())
             }
         }
+//
+//        Column {
+//            RichTextControls(richTextState)
+//            RichTextEditor(
+//                state = richTextState
+//            )
+//        }
 
-        Column {
-            RichTextControls(richTextState)
-            RichTextEditor(
-                state = richTextState
-            )
-        }
+        IRRichTextEditor(
+            modifier = Modifier.fillMaxWidth()
+                .heightIn(min = 200.dp),
+            richTextState = richTextState,
+        )
     }
 
     @Composable
