@@ -4,8 +4,7 @@ pika: &pika !<Box>
     - !<Image>
       tag: img5
       modifier:
-      - size: { w: 512, h: 512 }
-      - background: Red
+      - size: { w: 128, h: 128 }
 
 root:
   !<Column>
@@ -13,13 +12,22 @@ root:
     - fill-max-size: 1
     - background:
       color: { r: 55, g: 55, b: 55, a: 100 }
+    - padding: 16
   horizontal-alignment: Center
+  vertical-arrangement:
+    space: 24
   child:
     - !<Image>
       tag: img1
       modifier:
-        - size: { w: 512, h: 512 }
-        - background: Red
-    - !<Text>
+        - size: { w: 128, h: 128 }
+        - background:
+          color: { r: 255, a: 20 }
+          shape: { type: Rounded, topLeft: 30, topRight: 30, botLeft: 30, botRight: 30 }
+    - !<RichText>
       tag: Title
+      modifier:
+        - fill-max-width: 1
+        - background:
+          color: Red
     - *pika

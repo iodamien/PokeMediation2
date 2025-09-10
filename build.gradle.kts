@@ -17,7 +17,7 @@ repositories {
         url = uri("https://maven.pkg.github.com/iodamien/irobax-client")
         credentials {
             username = "iodamien"
-            password = "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"
+            password = "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"
         }
     }
 }
